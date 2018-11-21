@@ -15,91 +15,38 @@ namespace BOM_Checker
 {
 	public partial class Form1 : Form
 	{
-		string path = "\\\\backup-server\\Assembly Drawings\\TEST1077\\EDIF\\TEST1077_Schematic.EDF";
+		string path = "\\\\backup-server\\Assembly Drawings\\TEST1077\\EDIF\\TEST1077_Schematic.EDF"; //temrporary hardcode
 
 		public Form1()
 		{
 			InitializeComponent();
 		}
 
-		private List<string> read_edif_file(string path)
-		{
-			List<string> file_contents = new List<string>();
-
-			try
-			{
-				using (StreamReader read = new StreamReader(path))
-				{
-					string line;
-					while((line = read.ReadLine()) != null)
-						file_contents.Add(line);
-				}
-			}
-			catch
-			{
-				Console.WriteLine("Error in reading EDIF file");
-			}
-			return file_contents;
-		}
-
-		public DataTable GetYourData()
-		{
-			DataTable YourResultSet = new DataTable();
-
-			OleDbConnection yourConnectionHandler = new OleDbConnection(
-				@"Provider=VFPOLEDB.1;Data Source=C:\temp\pcmrpw\PARTMAST.dbf");
-
-			// if including the full dbc (database container) reference, just tack that on
-			//      OleDbConnection yourConnectionHandler = new OleDbConnection(
-			//          "Provider=VFPOLEDB.1;Data Source=C:\\SomePath\\NameOfYour.dbc;" );
-
-
-			// Open the connection, and if open successfully, you can try to query it
-			yourConnectionHandler.Open();
-
-			if (yourConnectionHandler.State == ConnectionState.Open)
-			{
-				string mySQL = "select * from PARTMAST";  // dbf table name
-
-				OleDbCommand MyQuery = new OleDbCommand(mySQL, yourConnectionHandler);
-				OleDbDataAdapter DA = new OleDbDataAdapter(MyQuery);
-
-				DA.Fill(YourResultSet);
-
-				yourConnectionHandler.Close();
-			}
-
-			return YourResultSet;
-		}
-
-		private void button1_Click(object sender, EventArgs e)
+		private void button1_Click(object sender, EventArgs e) //find edif file button
 		{
 			try
 			{
-				CommonOpenFileDialog dialog = new CommonOpenFileDialog();
+				CommonOpenFileDialog dialog = new CommonOpenFileDialog(); //run in Nuget -> Install-Package Microsoft.WindowsAPICodePack-Shell -Version 1.1.0
 				dialog.InitialDirectory = "\\\\backup-server\\Assembly Drawings\\";
 				if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
 				{
 					textbox_edif.Text = dialog.FileName;
 					path = dialog.FileName;
-				}
+				} //set path to variables
 			}
 			catch
 			{
-				MessageBox.Show("Unable to open Assembly Drawings");
+				MessageBox.Show("Error in file select");
 
 			}
-			//path.Replace("\\", "/");
-			/*
-			if (!Form1.edit_lock)
-				textbox_lotreports.Text = path + "\\Lot_Reports\\";
-			*/
 		}
 
 		private void button_parse_Click(object sender, EventArgs e)
 		{
-			var file_contents = read_edif_file(path);
-		}
+			var file_contents = read_edif_file(path);  //read in the file into memory
+			var filtered_file = filter_edif_file(file_contents);  //pick out the instances
+			var consolidated_list = consolidate_edif_file(filtered_file); //merge identical instances into one
+		}//parse edif file
 
 		private void button_db_Click(object sender, EventArgs e)
 		{
@@ -114,7 +61,7 @@ namespace BOM_Checker
 			{
 				Console.WriteLine(row["partno"]);
 			}
-		}
+		} //read the pcmrp db
 	}
 
 	class component
@@ -124,6 +71,8 @@ namespace BOM_Checker
 		public string value; //wattage or voltage
 		public string comment; //value
 		public string package;
+		public int instances;
+		public string raw_text;
 	}
 
 }
