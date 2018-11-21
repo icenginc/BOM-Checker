@@ -37,7 +37,6 @@ namespace BOM_Checker
 			catch
 			{
 				MessageBox.Show("Error in file select");
-
 			}
 		}
 
@@ -46,6 +45,7 @@ namespace BOM_Checker
 			var file_contents = read_edif_file(path);  //read in the file into memory
 			var filtered_file = filter_edif_file(file_contents);  //pick out the instances
 			var consolidated_list = consolidate_edif_file(filtered_file); //merge identical instances into one
+			var complete_list = assign_members(consolidated_list);
 		}//parse edif file
 
 		private void button_db_Click(object sender, EventArgs e)
@@ -64,15 +64,6 @@ namespace BOM_Checker
 		} //read the pcmrp db
 	}
 
-	class component
-	{
-		public string partno;
-		public string footprint;
-		public string value; //wattage or voltage
-		public string comment; //value
-		public string package;
-		public int instances;
-		public string raw_text;
-	}
+	
 
 }
