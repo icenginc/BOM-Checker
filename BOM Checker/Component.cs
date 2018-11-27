@@ -29,7 +29,11 @@ class component
 
 	private void assign_package()
 	{
-		int index = raw_text.IndexOf("PACKAGE") + 17; //skips the PACKAGE (String "
+		int index;
+		if(raw_text.Contains("package"))
+			index = raw_text.IndexOf("package") + 17; //skips the PACKAGE (String "
+		else 
+			index = raw_text.IndexOf("PACKAGE") + 17; //skips the PACKAGE (String "
 		int quote_index = raw_text.IndexOf('\"', index);
 		package = raw_text.Substring(index, quote_index - index);
 	}
@@ -45,9 +49,19 @@ class component
 	{
 		string key = "";
 		if (name.Contains("R"))
-			key = "WATTAGE";
+		{
+			if (raw_text.Contains("WATTAGE"))
+				key = "WATTAGE";
+			if (raw_text.Contains("wattage"))
+				key = "wattage";
+		}
 		if (name.Contains("C"))
-			key = "VOLTAGE";
+		{
+			if (raw_text.Contains("VOLTAGE"))
+				key = "VOLTAGE";
+			if (raw_text.Contains("voltage"))
+				key = "voltage";
+		}
 
 		int index = raw_text.IndexOf(key) + 17; //skips the PACKAGE (String "
 		int quote_index = raw_text.IndexOf('\"', index);
