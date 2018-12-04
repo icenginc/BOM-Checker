@@ -1,6 +1,6 @@
 ﻿using System;
 
-class component
+class component_edif
 {
 	public string name;
 	public string partno;

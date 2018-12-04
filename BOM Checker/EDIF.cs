@@ -35,15 +35,15 @@ namespace BOM_Checker
 			return file_contents;
 		} //read EDIF file into a string list
 
-		private List<component> filter_edif_file(List<string> edif_file)
+		private List<component_edif> filter_edif_file(List<string> edif_file)
 		{
-			List<component> components = new List<component>();
+			List<component_edif> components = new List<component_edif>();
 			for (int i = 0; i < edif_file.Count; i++)
 			{
 				string line = edif_file[i];
 				if (line.Contains("(Instance C") || line.Contains("(Instance R"))
 				{
-					component instance = new component();
+					component_edif instance = new component_edif();
 					instance.assign_name(line); //put the name in
 					for (int j = 0; j < 25; j++)
 					{
@@ -58,7 +58,7 @@ namespace BOM_Checker
 			return components;
 		}
 
-		private List<component> consolidate_edif_file(List<component> filtered_list)
+		private List<component_edif> consolidate_edif_file(List<component_edif> filtered_list)
 		{
 			for (int i = 0; i < filtered_list.Count; i ++)
 			{
@@ -80,9 +80,9 @@ namespace BOM_Checker
 
 		}
 
-		private List<component> assign_members(List<component> consolidated_list)
+		private List<component_edif> assign_members(List<component_edif> consolidated_list)
 		{
-			foreach (component current in consolidated_list)
+			foreach (component_edif current in consolidated_list)
 				current.assign_members();
 
 			return consolidated_list;
