@@ -37,6 +37,7 @@
 			this.label1 = new System.Windows.Forms.Label();
 			this.button_parse = new System.Windows.Forms.Button();
 			this.button_db = new System.Windows.Forms.Button();
+			this.button_compare = new System.Windows.Forms.Button();
 			this.SuspendLayout();
 			// 
 			// label3
@@ -122,11 +123,23 @@
 			this.button_db.UseVisualStyleBackColor = true;
 			this.button_db.Click += new System.EventHandler(this.button_db_Click);
 			// 
+			// button_compare
+			// 
+			this.button_compare.Location = new System.Drawing.Point(439, 230);
+			this.button_compare.Name = "button_compare";
+			this.button_compare.Size = new System.Drawing.Size(91, 21);
+			this.button_compare.TabIndex = 16;
+			this.button_compare.Text = "Compare";
+			this.button_compare.UseMnemonic = false;
+			this.button_compare.UseVisualStyleBackColor = true;
+			this.button_compare.Click += new System.EventHandler(this.button_compare_Click);
+			// 
 			// Form1
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(580, 261);
+			this.Controls.Add(this.button_compare);
 			this.Controls.Add(this.button_db);
 			this.Controls.Add(this.button_parse);
 			this.Controls.Add(this.label3);
@@ -154,6 +167,7 @@
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.Button button_parse;
 		private System.Windows.Forms.Button button_db;
+		private System.Windows.Forms.Button button_compare;
 	}
 }
 

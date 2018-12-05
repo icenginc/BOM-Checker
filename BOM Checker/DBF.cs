@@ -15,27 +15,19 @@ namespace BOM_Checker
 	public partial class Form1 : Form
 	{
 
-		private DataTable get_db_data(List<component_edif> edif_list)
+		private DataTable get_partmast_data(List<component_edif> edif_list)
 		{
 			DataTable results = new DataTable();
 			List<string> part_nums = return_part_nums(edif_list);
 			string part_list = return_part_list(part_nums);
 
-			OleDbConnection yourConnectionHandler = new OleDbConnection(
-				@"Provider=VFPOLEDB.1;Data Source=C:\temp\pcmrpw\PARTMAST.dbf");
+			OleDbConnection yourConnectionHandler = new OleDbConnection(@"Provider=VFPOLEDB.1;Data Source=C:\temp\pcmrpw\PARTMAST.dbf"); //need to install this provider
 
-			// if including the full dbc (database container) reference, just tack that on
-			//      OleDbConnection yourConnectionHandler = new OleDbConnection(
-			//          "Provider=VFPOLEDB.1;Data Source=C:\\SomePath\\NameOfYour.dbc;" );
-
-
-			// Open the connection, and if open successfully, you can try to query it
 			yourConnectionHandler.Open();
 
 			if (yourConnectionHandler.State == ConnectionState.Open)
 			{
-				string mySQL = "SELECT `partno`, `aux1`, `aux2`, `footprint`, `value`, `packtype` FROM PARTMAST WHERE `partno` IN (" + part_list + ")";  // dbf table name
-																								//'partno', 'aux1', 'aux2', 'footprint', 'value', 'package'
+				string mySQL = "SELECT `partno`, `aux1`, `aux2`, `footprint`, `value`, `packtype` FROM PARTMAST WHERE `partno` IN (" + part_list + ")";  // dbf table + columns
 				OleDbCommand MyQuery = new OleDbCommand(mySQL, yourConnectionHandler);
 				OleDbDataAdapter DA = new OleDbDataAdapter(MyQuery);
 
@@ -71,6 +63,32 @@ namespace BOM_Checker
 			return part_list;
 		}
 
+		private List<string> check_datatable(List<string> part_nums, DataTable results)
+		{
+			List<string> not_found = new List<string>();
+
+			foreach (string part in part_nums)
+			{
+				DataRow[] selected = results.Select("partno = '" + part + "'");
+				if (selected.Length < 0)
+					not_found.Add(part);
+			}
+
+			return not_found;
+		}
+
+		private void handle_not_found(List<string> not_found)
+		{
+			if (not_found.Count == 0)
+				Console.WriteLine("EDIF partno's all found in DB");
+			else
+			{
+				string error = "";
+				foreach (string part in not_found)
+					error += part + " ";
+				MessageBox.Show("Part number(s) not found in database: " + error);
+			} //if there are any entries that are not found in the database, notify user
+		}
 		/** For debug use only **/
 
 		public void CreateCSVFile(ref DataTable dt, string strFilePath) //<- for development aid
