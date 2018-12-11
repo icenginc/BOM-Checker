@@ -31,7 +31,7 @@
 			this.label3 = new System.Windows.Forms.Label();
 			this.button2 = new System.Windows.Forms.Button();
 			this.button1 = new System.Windows.Forms.Button();
-			this.textbox_temp_reports = new System.Windows.Forms.TextBox();
+			this.textbox_bomno = new System.Windows.Forms.TextBox();
 			this.textbox_edif = new System.Windows.Forms.TextBox();
 			this.label2 = new System.Windows.Forms.Label();
 			this.label1 = new System.Windows.Forms.Label();
@@ -69,12 +69,13 @@
 			this.button1.UseVisualStyleBackColor = true;
 			this.button1.Click += new System.EventHandler(this.button1_Click);
 			// 
-			// textbox_temp_reports
+			// textbox_bomno
 			// 
-			this.textbox_temp_reports.Location = new System.Drawing.Point(159, 209);
-			this.textbox_temp_reports.Name = "textbox_temp_reports";
-			this.textbox_temp_reports.Size = new System.Drawing.Size(215, 20);
-			this.textbox_temp_reports.TabIndex = 10;
+			this.textbox_bomno.Location = new System.Drawing.Point(159, 209);
+			this.textbox_bomno.Name = "textbox_bomno";
+			this.textbox_bomno.Size = new System.Drawing.Size(215, 20);
+			this.textbox_bomno.TabIndex = 10;
+			this.textbox_bomno.TextChanged += new System.EventHandler(this.textbox_bomno_textchanged);
 			// 
 			// textbox_edif
 			// 
@@ -88,9 +89,9 @@
 			this.label2.AutoSize = true;
 			this.label2.Location = new System.Drawing.Point(35, 209);
 			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(102, 13);
+			this.label2.Size = new System.Drawing.Size(80, 13);
 			this.label2.TabIndex = 8;
-			this.label2.Text = "- Temp Report Files:";
+			this.label2.Text = "- BOM Number:";
 			// 
 			// label1
 			// 
@@ -145,7 +146,7 @@
 			this.Controls.Add(this.label3);
 			this.Controls.Add(this.button2);
 			this.Controls.Add(this.button1);
-			this.Controls.Add(this.textbox_temp_reports);
+			this.Controls.Add(this.textbox_bomno);
 			this.Controls.Add(this.textbox_edif);
 			this.Controls.Add(this.label2);
 			this.Controls.Add(this.label1);
@@ -161,7 +162,7 @@
 		private System.Windows.Forms.Label label3;
 		private System.Windows.Forms.Button button2;
 		private System.Windows.Forms.Button button1;
-		private System.Windows.Forms.TextBox textbox_temp_reports;
+		private System.Windows.Forms.TextBox textbox_bomno;
 		private System.Windows.Forms.TextBox textbox_edif;
 		private System.Windows.Forms.Label label2;
 		private System.Windows.Forms.Label label1;

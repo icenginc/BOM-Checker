@@ -21,22 +21,55 @@ namespace BOM_Checker
 			List<string> part_nums = return_part_nums(edif_list);
 			string part_list = return_part_list(part_nums);
 
-			OleDbConnection yourConnectionHandler = new OleDbConnection(@"Provider=VFPOLEDB.1;Data Source=C:\temp\pcmrpw\PARTMAST.dbf"); //need to install this provider
+			OleDbConnection connection = new OleDbConnection(@"Provider=VFPOLEDB.1;Data Source=C:\temp\pcmrpw\PARTMAST.dbf"); //need to install this provider
 
-			yourConnectionHandler.Open();
+			connection.Open();
 
-			if (yourConnectionHandler.State == ConnectionState.Open)
+			if (connection.State == ConnectionState.Open)
 			{
 				string mySQL = "SELECT `partno`, `aux1`, `aux2`, `footprint`, `value`, `packtype` FROM PARTMAST WHERE `partno` IN (" + part_list + ")";  // dbf table + columns
-				OleDbCommand MyQuery = new OleDbCommand(mySQL, yourConnectionHandler);
+				OleDbCommand MyQuery = new OleDbCommand(mySQL, connection);
 				OleDbDataAdapter DA = new OleDbDataAdapter(MyQuery);
 
 				DA.Fill(results);
 
-				yourConnectionHandler.Close();
+				connection.Close();
 			}
 
-			//CreateCSVFile(ref results, "C:\\temp\\pcmrpw\\Excel Export\\partmast.csv");
+			//CreateCSVFile(ref results, "C:\\temp\\pcmrpw\\Excel Export\\partmast.csv"); //for visual tool
+
+			return results;
+		}
+
+		private DataTable get_bom_data(string bomno)
+		{
+			if (bomno == "" || !bomno.Contains("-"))
+			{
+				MessageBox.Show("Invalid BOM Number entry!");
+				throw new InvalidDataException();
+			}
+				
+
+			DataTable results = new DataTable();
+			//List<string> part_nums = return_part_nums(edif_list);
+			//string part_list = return_part_list(part_nums);
+
+			OleDbConnection connection = new OleDbConnection(@"Provider=VFPOLEDB.1;Data Source=C:\temp\pcmrpw\BOM.dbf"); //need to install this provider
+
+			connection.Open();
+
+			if (connection.State == ConnectionState.Open)
+			{
+				string mySQL = "SELECT `bomno`, `partno`, `qty`, `refdesmemo` FROM BOM WHERE `bomno`='" + bomno + "';";  // dbf table + columns
+				OleDbCommand cmd = new OleDbCommand(mySQL, connection);
+				OleDbDataAdapter DA = new OleDbDataAdapter(cmd);
+
+				DA.Fill(results);
+
+				connection.Close();
+			}
+
+			CreateCSVFile(ref results, "C:\\temp\\pcmrpw\\Excel Export\\bom.csv"); //for visual tool
 
 			return results;
 		}

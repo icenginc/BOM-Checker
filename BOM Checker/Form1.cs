@@ -16,9 +16,10 @@ namespace BOM_Checker
 	public partial class Form1 : Form
 	{
 		string path = "\\\\backup-server\\Assembly Drawings\\TEST1077\\EDIF\\TEST1077_Schematic.EDF"; //temrporary hardcode
+		string bomno = "814-1077"; //temporary hardcode
 		List<component_edif> edif_list = new List<component_edif>();
-		DataTable partmast_data = new DataTable();
-		List<
+		DataTable partmast_data, bom_data = new DataTable();
+		//List<
 
 		public Form1()
 		{
@@ -63,6 +64,7 @@ namespace BOM_Checker
 		{
 			Console.WriteLine("Accessing PCMRP database...");
 			partmast_data = get_partmast_data(edif_list);
+			bom_data = get_bom_data(bomno);
 			Console.WriteLine("Checking against EDIF entries...");
 			var not_found = check_datatable(return_part_nums(edif_list), partmast_data); //check that we have matching number of entries, returns list of non-matching parts
 			handle_not_found(not_found); //if there is a non-matching partno, then tell user here
@@ -84,6 +86,11 @@ namespace BOM_Checker
 			Console.WriteLine("Parsing text into values...");
 			edif_list = assign_members(consolidated_list); //fill out class objects from raw text
 			Console.WriteLine("Discovered " + edif_list.Count + " unique parts from EDIF file." + Environment.NewLine);
+		}
+
+		private void textbox_bomno_textchanged(object sender, EventArgs e)
+		{
+			bomno = textbox_bomno.Text;
 		}
 
 		private void button_compare_Click(object sender, EventArgs e)

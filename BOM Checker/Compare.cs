@@ -13,7 +13,7 @@ namespace BOM_Checker
 			Console.WriteLine("Hello Worker");
 			foreach (component_edif component in edif_list)
 			{
-				bool[] compare = Enumerable.Repeat<bool>(false, 4).ToArray(); //by default, does not match
+				bool[] compare = Enumerable.Repeat<bool>(false, 4).ToArray(); //by default, each element does not match
 				string partno = component.partno;
 				var datarow = partmast_data.Select("partno = '" + partno + "'")[0];
 
@@ -29,7 +29,11 @@ namespace BOM_Checker
 
 				for (int i = 0; i < compare.Length; i++)
 				{
-					compare. 
+					if (compare[0] == false)
+					{
+						//new part_mismatch(
+						//implement in here
+					}
 				}//make this scan and then point out the non matching part. create new instance of non match?
 			}
 		}
