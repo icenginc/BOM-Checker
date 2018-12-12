@@ -17,9 +17,9 @@ namespace BOM_Checker
 	{
 		string path = "\\\\backup-server\\Assembly Drawings\\TEST1077\\EDIF\\TEST1077_Schematic.EDF"; //temrporary hardcode
 		string bomno = "814-1077"; //temporary hardcode
-		List<component> edif_list = new List<component>();
+		List<component> edif_list, bom_component_list = new List<component>();
 		DataTable partmast_data, bom_data = new DataTable();
-		//List<
+		//List errors
 
 		public Form1()
 		{
@@ -62,19 +62,15 @@ namespace BOM_Checker
 
 		private void db_worker_DoWork(object sender, DoWorkEventArgs e)
 		{
-			Console.WriteLine("Accessing PCMRP database...");
+			Console.WriteLine("Accessing PCMRP partmast database...");
 			partmast_data = get_partmast_data(edif_list);
+			Console.WriteLine("Accessing PCMRP bom database...");
 			bom_data = get_bom_data(bomno);
-			var bom_component_list = build_bom_list(bom_data);
+			bom_component_list = build_bom_list(bom_data);
 			Console.WriteLine("Checking against EDIF entries...");
-			var not_found = check_partmast_datatable(return_part_nums(edif_list), partmast_data); //check that we have matching number of entries, returns list of non-matching parts
-			//var mismatch = check_bom_datatable(edif_list, bom_data);
-			handle_not_found(not_found); //if there is a non-matching partno, then tell user here
-
-			foreach (DataRow row in partmast_data.Rows)
-			{
-				Console.WriteLine(row["partno"]);
-			}
+			var not_found_partmast = check_partmast_datatable(return_part_nums(edif_list), partmast_data); //check that we have matching number of entries, returns list of non-matching parts
+			var not_found_bom = check_bom_datatable(return_part_nums(edif_list), bom_data); //check this too
+			handle_not_found(not_found_partmast, not_found_bom); //if there is a non-matching partno, then tell user here
 		}
 
 		private void edif_worker_DoWork(object sender, DoWorkEventArgs e)

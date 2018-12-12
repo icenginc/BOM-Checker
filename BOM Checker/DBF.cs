@@ -128,17 +128,41 @@ namespace BOM_Checker
 			return not_found;
 		} //checks that each part from the edif file is found within partmast database
 
-		private void handle_not_found(List<string> not_found)
+		private List<string> check_bom_datatable(List<string> part_nums, DataTable results)
 		{
-			if (not_found.Count == 0)
-				Console.WriteLine("EDIF partno's all found in DB");
+			List<string> not_found = new List<string>();
+
+			foreach (string part in part_nums)
+			{
+				DataRow[] selected = results.Select("partno = '" + part + "'");
+				if (selected.Length < 0)
+					not_found.Add(part);
+			}
+
+			return not_found;
+		} //checks that each part from the edif file is found within bom database
+
+		private void handle_not_found(List<string> not_found_partmast, List<string> not_found_bom)
+		{
+			if (not_found_partmast.Count == 0)
+				Console.WriteLine("EDIF partno's all found in PartMast DB");
 			else
 			{
 				string error = "";
-				foreach (string part in not_found)
+				foreach (string part in not_found_partmast)
 					error += part + " ";
-				MessageBox.Show("Part number(s) not found in database: " + error);
-			} //if there are any entries that are not found in the database, notify user
+				MessageBox.Show("Part number(s) not found in PartMast DB: " + error);
+			} //if there are any entries that are not found in the partmast database, notify user
+
+			if (not_found_bom.Count == 0)
+				Console.WriteLine("EDIF partno's all found in BOM DB");
+			else
+			{
+				string error = "";
+				foreach (string part in not_found_bom)
+					error += part + " ";
+				MessageBox.Show("Part number(s) not found in BOM DB: " + error);
+			} //if there are any entries that are not found in the bom database, notify user
 		}
 
 		/** For debug use only **/

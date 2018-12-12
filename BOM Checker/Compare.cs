@@ -11,6 +11,46 @@ namespace BOM_Checker
 		private void Compare_worker_DoWork(object sender, DoWorkEventArgs e)
 		{
 			Console.WriteLine("Hello Worker");
+			partmast_compare();
+			bom_compare();
+		}
+
+		private void bom_compare()
+		{
+			foreach (component component_edif in edif_list)
+			{
+				//compare edif value with value from bom db (match based on partno, then qty and ref des')
+				bool[] compare = Enumerable.Repeat<bool>(false, 2).ToArray(); //default false
+				string partno = component_edif.partno;
+
+				foreach (component component_bom in bom_component_list)
+				{
+					if (component_edif.partno == component_bom.partno)
+					{
+						compare[0] = compare_values(component_edif.instances, component_bom.instances); //compare number
+
+						component_bom.instance_names.Sort();
+						component_edif.instance_names.Sort();
+
+						compare[1] = component_edif.instance_names.SequenceEqual(component_bom.instance_names);
+
+						for (int i = 0; i < compare.Length; i++)
+						{
+							if (compare[0] == false)
+							{
+								//new part_mismatch(
+								//implement in here to report the mismatch
+							}
+						}//make this scan and then point out the non matching part. create new instance of non match?
+
+					}//do comparison in here
+				}//find the matching bom component, then compare the values
+
+			}//loop through edif list
+		} //compare bom part numbers and names with edif names/instances of components
+
+		private void partmast_compare()
+		{
 			foreach (component component in edif_list)
 			{
 				bool[] compare = Enumerable.Repeat<bool>(false, 4).ToArray(); //by default, each element does not match
@@ -19,24 +59,24 @@ namespace BOM_Checker
 
 				//pass both edif and partmast values into unit parse then compare
 				if (component.value.Contains("V"))
-					compare[0] = compare_values(unit_parse(component.value), unit_parse(datarow[1].ToString())); 
+					compare[0] = compare_values(unit_parse(component.value), unit_parse(datarow[1].ToString()));
 				else if (component.value.Contains("W"))
 					compare[0] = compare_values(unit_parse(component.value), unit_parse(datarow[2].ToString()));
 
 				compare[1] = compare_values(unit_parse(component.footprint), unit_parse(datarow[3].ToString())); //footprint mrp and footprint edif
 				compare[2] = compare_values(unit_parse(component.comment), unit_parse(datarow[4].ToString())); //value mrp and comment edif
-				compare[3] = compare_values(unit_parse(component.package), unit_parse(datarow[4].ToString())); //packtype mrp and package edif
+				compare[3] = compare_values(unit_parse(component.package), unit_parse(datarow[5].ToString())); //packtype mrp and package edif
 
 				for (int i = 0; i < compare.Length; i++)
 				{
 					if (compare[0] == false)
 					{
 						//new part_mismatch(
-						//implement in here
+						//implement in here to report the mismatch
 					}
 				}//make this scan and then point out the non matching part. create new instance of non match?
 			}
-		}
+		} //compare partmast values with edif values of components
 
 		private bool compare_values(float edif, float dbf)
 		{
