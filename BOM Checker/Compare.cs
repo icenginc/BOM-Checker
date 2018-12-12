@@ -11,7 +11,7 @@ namespace BOM_Checker
 		private void Compare_worker_DoWork(object sender, DoWorkEventArgs e)
 		{
 			Console.WriteLine("Hello Worker");
-			foreach (component_edif component in edif_list)
+			foreach (component component in edif_list)
 			{
 				bool[] compare = Enumerable.Repeat<bool>(false, 4).ToArray(); //by default, each element does not match
 				string partno = component.partno;

@@ -15,7 +15,7 @@ namespace BOM_Checker
 	public partial class Form1 : Form
 	{
 
-		private DataTable get_partmast_data(List<component_edif> edif_list)
+		private DataTable get_partmast_data(List<component> edif_list)
 		{
 			DataTable results = new DataTable();
 			List<string> part_nums = return_part_nums(edif_list);
@@ -69,16 +69,28 @@ namespace BOM_Checker
 				connection.Close();
 			}
 
-			CreateCSVFile(ref results, "C:\\temp\\pcmrpw\\Excel Export\\bom.csv"); //for visual tool
+			//CreateCSVFile(ref results, "C:\\temp\\pcmrpw\\Excel Export\\bom.csv"); //for visual tool
 
 			return results;
 		}
 
-		private List<string> return_part_nums(List<component_edif> edif_list)
+		private List<component> build_bom_list(DataTable bom)
+		{
+			List<component> bom_list = new List<component>();
+
+			foreach (DataRow row in bom.Rows)
+			{
+				var data = row["bomno"];
+			}//loop through all entries in db
+
+			return bom_list;
+		}
+
+		private List<string> return_part_nums(List<component> edif_list)
 		{
 			List<string> part_nums = new List<string>();
 
-			foreach (component_edif component in edif_list)
+			foreach (component component in edif_list)
 				part_nums.Add(component.partno);
 
 			return part_nums;
@@ -94,9 +106,9 @@ namespace BOM_Checker
 			part_list = part_list.Substring(0, part_list.Length - 2); //cut off the last ", "
 
 			return part_list;
-		}
+		} //this function returns a string list of the parts in the edif component list
 
-		private List<string> check_datatable(List<string> part_nums, DataTable results)
+		private List<string> check_partmast_datatable(List<string> part_nums, DataTable results)
 		{
 			List<string> not_found = new List<string>();
 
@@ -108,7 +120,7 @@ namespace BOM_Checker
 			}
 
 			return not_found;
-		}
+		} //checks that each part from the edif file is found within partmast database
 
 		private void handle_not_found(List<string> not_found)
 		{
@@ -122,6 +134,7 @@ namespace BOM_Checker
 				MessageBox.Show("Part number(s) not found in database: " + error);
 			} //if there are any entries that are not found in the database, notify user
 		}
+
 		/** For debug use only **/
 
 		public void CreateCSVFile(ref DataTable dt, string strFilePath) //<- for development aid

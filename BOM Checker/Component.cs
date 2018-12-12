@@ -1,6 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 
-class component_edif
+class component
 {
 	public string name;
 	public string partno;
@@ -9,6 +10,7 @@ class component_edif
 	public string comment; //value
 	public string package;
 	public int instances = 1;
+	public List<string> instance_names = new List<string>();
 	public string raw_text;
 
 	public void assign_members()
@@ -25,6 +27,7 @@ class component_edif
 		int index = line.IndexOf("Instance") + 9; //skips the PACKAGE (String "
 		
 		name = line.Substring(index, line.Length - index);
+		instance_names.Add(name); //add itself to the instance names
 	}
 
 	private void assign_package()
