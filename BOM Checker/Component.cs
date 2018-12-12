@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 
 class component
 {
@@ -12,6 +13,14 @@ class component
 	public int instances = 1;
 	public List<string> instance_names = new List<string>();
 	public string raw_text;
+	public DataRow row;
+
+	public component(DataRow input_row)
+	{
+		row = input_row;
+	}
+
+	public component() { } //empty constructor
 
 	public void assign_members()
 	{
@@ -20,6 +29,30 @@ class component
 		assign_value();
 		assign_comment();
 		assign_package();
+	}
+
+	public void assign_members_bom()
+	{
+		partno = row["partno"].ToString();
+		assign_instances(row["qty"].ToString());
+		assign_instance_names(row["refdesmemo"].ToString());
+	}
+
+	private void assign_instance_names(string input)
+	{
+		input = input.Remove(0, 11); //remove "Per board: "
+		var ref_dess = input.Split(',');
+		foreach (string ref_des in ref_dess)
+			instance_names.Add(ref_des);
+	}
+
+	private void assign_instances(string qty)
+	{
+		float temp;
+		if (!float.TryParse(qty, out temp)) //if this fails, set to 0
+			instances = 0;
+		else if (!Int32.TryParse(temp.ToString(), out instances)) //if above doesnt fail, then this fails, set to 0
+			instances = 0;
 	}
 
 	public void assign_name(string line)

@@ -80,7 +80,13 @@ namespace BOM_Checker
 
 			foreach (DataRow row in bom.Rows)
 			{
+				component new_component = new component(row);
+
 				var data = row["bomno"];
+				new_component.assign_members_bom();
+				string temp = new_component.instance_names[0]; //first part name from each row -> to make next lien more readable
+				if ((temp.StartsWith("R") || temp.StartsWith("C")) && Char.IsDigit(temp[1])) //if starts with C or R, and has a number after that
+					bom_list.Add(new_component);
 			}//loop through all entries in db
 
 			return bom_list;
