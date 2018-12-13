@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 class part_mismatch
 {
-	public string mrp_partno, edif_partno;
+	public string partno;
 	public string mrp_value, edif_value; //also called 'comment' in altium
 	public string mrp_package, edif_package;
 	public string mrp_footprint, edif_footprint;

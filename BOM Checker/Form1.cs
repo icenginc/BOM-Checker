@@ -15,7 +15,7 @@ namespace BOM_Checker
 {
 	public partial class Form1 : Form
 	{
-		string path = "\\\\backup-server\\Assembly Drawings\\TEST1077\\EDIF\\TEST1077_Schematic.EDF"; //temrporary hardcode
+		string path = "C:\\temp\\TEST1077_Schematic.EDF"; //temrporary hardcode
 		string bomno = "814-1077"; //temporary hardcode
 		List<component> edif_list, bom_component_list = new List<component>();
 		DataTable partmast_data, bom_data = new DataTable();
@@ -96,8 +96,6 @@ namespace BOM_Checker
 			BackgroundWorker compare_worker = new BackgroundWorker();
 			compare_worker.DoWork += Compare_worker_DoWork;
 			compare_worker.RunWorkerAsync();
-			foreach (part_mismatch error in error_list)
-				Console.WriteLine(error);
 		}
 	}
 }

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-
+using System.Linq;
 class component
 {
 	public string name;
@@ -32,8 +32,8 @@ class component
 	}
 
 	public void assign_members_bom()
-	{
-		partno = row["partno"].ToString();
+	{	
+		partno = new String(row["partno"].ToString().Where(ch => !char.IsWhiteSpace(ch)).ToArray());
 		assign_instances(row["qty"].ToString());
 		assign_instance_names(row["refdesmemo"].ToString());
 	}
@@ -43,7 +43,7 @@ class component
 		input = input.Remove(0, 11); //remove "Per board: "
 		var ref_dess = input.Split(',');
 		foreach (string ref_des in ref_dess)
-			instance_names.Add(ref_des);
+			instance_names.Add(new String(ref_des.Where(ch => !char.IsWhiteSpace(ch)).ToArray()));
 	}
 
 	private void assign_instances(string qty)
@@ -53,7 +53,7 @@ class component
 			instances = 0;
 		else if (!Int32.TryParse(temp.ToString(), out instances)) //if above doesnt fail, then this fails, set to 0
 			instances = 0;
-	}
+	}//string to float to int conversion (bom database gives string based float)
 
 	public void assign_name(string line)
 	{
