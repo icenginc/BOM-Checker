@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data;
 using System.Threading.Tasks;
 using System.ComponentModel;
 using System.Windows.Forms;
@@ -10,9 +11,11 @@ namespace BOM_Checker
 	{
 		private void Compare_worker_DoWork(object sender, DoWorkEventArgs e)
 		{
-			Console.WriteLine("Hello Worker");
+			Console.WriteLine("Comparing each entry in EDIF file to partmast db values.. ");
 			partmast_compare();
+			Console.WriteLine("Comparing each entry in EDIF file to bom db values.. ");
 			bom_compare();
+			Console.WriteLine("Done creating error list.");
 		}
 
 		private void bom_compare()
@@ -34,14 +37,7 @@ namespace BOM_Checker
 
 						compare[1] = component_edif.instance_names.SequenceEqual(component_bom.instance_names);
 
-						for (int i = 0; i < compare.Length; i++)
-						{
-							if (compare[0] == false)
-							{
-								//new part_mismatch(
-								//implement in here to report the mismatch
-							}
-						}//make this scan and then point out the non matching part. create new instance of non match?
+						build_error_list(compare, component_edif, component_bom);
 
 					}//do comparison in here
 				}//find the matching bom component, then compare the values
@@ -54,8 +50,16 @@ namespace BOM_Checker
 			foreach (component component in edif_list)
 			{
 				bool[] compare = Enumerable.Repeat<bool>(false, 4).ToArray(); //by default, each element does not match
-				string partno = component.partno;
-				var datarow = partmast_data.Select("partno = '" + partno + "'")[0];
+				string partno = component.partno.ToUpper();
+				DataRow datarow = partmast_data.NewRow(); //placeholder row to use conditional below
+				if (partno != "")
+					datarow = partmast_data.Select("partno = '" + partno + "'")[0];
+				else
+				{
+					string error = "Partno missing from entry \"" + component.name + "\" in EDIF file.";
+					Console.WriteLine(error);
+					part_mismatch name_missing = new part_mismatch(error);
+				}
 
 				//pass both edif and partmast values into unit parse then compare
 				if (component.value.Contains("V"))
@@ -67,16 +71,68 @@ namespace BOM_Checker
 				compare[2] = compare_values(unit_parse(component.comment), unit_parse(datarow[4].ToString())); //value mrp and comment edif
 				compare[3] = compare_values(unit_parse(component.package), unit_parse(datarow[5].ToString())); //packtype mrp and package edif
 
-				for (int i = 0; i < compare.Length; i++)
-				{
-					if (compare[0] == false)
-					{
-						//new part_mismatch(
-						//implement in here to report the mismatch
-					}
-				}//make this scan and then point out the non matching part. create new instance of non match?
+				build_error_list(compare, component, datarow); //scans through the bools, and adds to the error list if necessary.
 			}
 		} //compare partmast values with edif values of components
+
+		private void build_error_list(bool[] compare, component edif, DataRow bom) //overload for pcmrp
+		{
+			for (int i = 0; i < compare.Length; i++)
+			{
+				if (!compare[0])
+				{
+					part_mismatch auxs = new part_mismatch("aux mismatch");
+					auxs.edif_aux = edif.comment;
+					if (edif.value.Contains("V"))
+						auxs.mrp_aux = bom[1].ToString();
+					else if (edif.value.Contains("W"))
+						auxs.mrp_aux = bom[2].ToString();
+					error_list.Add(auxs);
+				}//if aux(V or W) rating of component doesn't match (wattage or voltage)
+				if (!compare[1])
+				{
+					part_mismatch footprints = new part_mismatch("footprint mismatch");
+					footprints.edif_footprint = edif.footprint;
+					footprints.mrp_footprint = bom[3].ToString();
+					error_list.Add(footprints);
+				}//if footprint doesn't match
+				if (!compare[2])
+				{
+					part_mismatch values = new part_mismatch("value mismatch");
+					values.edif_value = edif.value;
+					values.mrp_value = bom[4].ToString();
+					error_list.Add(values);
+				}// if value of component don't match
+				if (!compare[3])
+				{
+					part_mismatch packages = new part_mismatch("package mismatch");
+					packages.edif_package = edif.package;
+					packages.mrp_package = bom[5].ToString();
+					error_list.Add(packages);
+				}// if package of component doesnt match
+			} //scan through bool list
+		} //if there is a false then adds to error_list and fills the data.
+
+		private void build_error_list(bool[] compare, component edif, component bom) //overload for bom 
+		{
+			for (int i = 0; i < compare.Length; i++)
+			{
+				if (!compare[0])
+				{
+					part_mismatch instances = new part_mismatch("instance mismatch");
+					instances.edif_instances = edif.instances.ToString();
+					instances.mrp_instances = bom.instances.ToString();
+					error_list.Add(instances);
+				}//if instances of component doesn't match
+				if (!compare[1])
+				{
+					part_mismatch instance_names = new part_mismatch("instance_names mismatch");
+					instance_names.edif_instance_names = edif.instance_names;
+					instance_names.mrp_instance_names = bom.instance_names;
+					error_list.Add(instance_names);
+				}//if instance names doesn't match
+			} //scan through bool list
+		}//if there is a false then adds to error_list and fills the data.
 
 		private bool compare_values(float edif, float dbf)
 		{
@@ -94,8 +150,8 @@ namespace BOM_Checker
 		private float unit_parse(string input)
 		{
 			float value;
-			string striped = new String(input.Where(char.IsDigit).ToArray());
-			if (!float.TryParse(striped, out value))
+			string striped = new String(input.Where(character => char.IsDigit(character) || char.IsPunctuation(character)).ToArray());
+			if (!float.TryParse(striped.Replace("/", ""), out value) && input != "")
 				throw new System.FormatException();
 
 			if (input.Contains("m"))//milli
@@ -125,7 +181,7 @@ namespace BOM_Checker
 
 				if (int.TryParse(split[0], out a) && int.TryParse(split[1], out b))
 				{
-					return a / b;
+					return (float)a / b;
 				}
 			}
 			return value;

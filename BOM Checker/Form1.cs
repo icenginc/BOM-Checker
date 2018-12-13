@@ -19,7 +19,7 @@ namespace BOM_Checker
 		string bomno = "814-1077"; //temporary hardcode
 		List<component> edif_list, bom_component_list = new List<component>();
 		DataTable partmast_data, bom_data = new DataTable();
-		//List errors
+		List<part_mismatch> error_list = new List<part_mismatch>(); //to store errors in
 
 		public Form1()
 		{
@@ -96,6 +96,8 @@ namespace BOM_Checker
 			BackgroundWorker compare_worker = new BackgroundWorker();
 			compare_worker.DoWork += Compare_worker_DoWork;
 			compare_worker.RunWorkerAsync();
+			foreach (part_mismatch error in error_list)
+				Console.WriteLine(error);
 		}
 	}
 }

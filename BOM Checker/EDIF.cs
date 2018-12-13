@@ -51,8 +51,9 @@ namespace BOM_Checker
 						if (line.Contains("Property") && line.Contains("String") && !line.Contains("UniqueId"))
 							instance.raw_text += line;
 					}
-
-					components.Add(instance);
+					instance.raw_text = instance.raw_text.ToLower();
+					if(!instance.raw_text.Contains("dni")) //dont save if its a DNI
+						components.Add(instance);
 				} //save next 25 lines if so, then save the object
 			}
 			return components;

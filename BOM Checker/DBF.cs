@@ -19,7 +19,7 @@ namespace BOM_Checker
 		{
 			DataTable results = new DataTable();
 			List<string> part_nums = return_part_nums(edif_list);
-			string part_list = return_part_list(part_nums);
+			string part_list = return_part_list(part_nums).ToUpper();
 
 			OleDbConnection connection = new OleDbConnection(@"Provider=VFPOLEDB.1;Data Source=C:\temp\pcmrpw\PARTMAST.dbf"); //need to install this provider
 
