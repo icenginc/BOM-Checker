@@ -82,7 +82,6 @@ namespace BOM_Checker
 			{
 				component new_component = new component(row);
 
-				var data = row["bomno"];
 				new_component.assign_members_bom();
 				string temp = new_component.instance_names[0]; //first part name from each row -> to make next lien more readable
 				if ((temp.StartsWith("R") || temp.StartsWith("C")) && Char.IsDigit(temp[1])) //if starts with C or R, and has a number after that
@@ -114,7 +113,7 @@ namespace BOM_Checker
 			return part_list;
 		} //this function returns a string list of the parts in the edif component list
 
-		private List<string> check_partmast_datatable(List<string> part_nums, DataTable results)
+		private List<string> check_datatable(List<string> part_nums, DataTable results)
 		{
 			List<string> not_found = new List<string>();
 
@@ -126,21 +125,7 @@ namespace BOM_Checker
 			}
 
 			return not_found;
-		} //checks that each part from the edif file is found within partmast database
-
-		private List<string> check_bom_datatable(List<string> part_nums, DataTable results)
-		{
-			List<string> not_found = new List<string>();
-
-			foreach (string part in part_nums)
-			{
-				DataRow[] selected = results.Select("partno = '" + part + "'");
-				if (selected.Length < 0)
-					not_found.Add(part);
-			}
-
-			return not_found;
-		} //checks that each part from the edif file is found within bom database
+		} //checks that each part from the edif file is found within bom or partmast database
 
 		private void handle_not_found(List<string> not_found_partmast, List<string> not_found_bom)
 		{

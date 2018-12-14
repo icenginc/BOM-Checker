@@ -68,8 +68,8 @@ namespace BOM_Checker
 			bom_data = get_bom_data(bomno);
 			bom_component_list = build_bom_list(bom_data);
 			Console.WriteLine("Checking against EDIF entries...");
-			var not_found_partmast = check_partmast_datatable(return_part_nums(edif_list), partmast_data); //check that we have matching number of entries, returns list of non-matching parts
-			var not_found_bom = check_bom_datatable(return_part_nums(edif_list), bom_data); //check this too
+			var not_found_partmast = check_datatable(return_part_nums(edif_list), partmast_data); //check that we have matching number of entries, returns list of non-matching parts
+			var not_found_bom = check_datatable(return_part_nums(edif_list), bom_data); //check this too
 			handle_not_found(not_found_partmast, not_found_bom); //if there is a non-matching partno, then tell user here
 		}
 
@@ -95,7 +95,18 @@ namespace BOM_Checker
 		{
 			BackgroundWorker compare_worker = new BackgroundWorker();
 			compare_worker.DoWork += Compare_worker_DoWork;
+			compare_worker.RunWorkerCompleted += Compare_worker_RunWorkerCompleted;
 			compare_worker.RunWorkerAsync();
 		}
+
+		private void Compare_worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+		{
+			foreach (part_mismatch error in error_list)
+			{
+				textBox_status.Text += error.name + "(" + error.partno.ToUpper() + ")" + ": " + error.error 
+					+ " (" + error.string_mismatch() + ")" + Environment.NewLine;
+			}
+			//build excel file and populate textbox in here.
+		}//occurs after comparison is done.
 	}
 }

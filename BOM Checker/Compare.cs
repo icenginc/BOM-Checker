@@ -16,6 +16,7 @@ namespace BOM_Checker
 			partmast_compare();
 			Console.WriteLine("Comparing each entry in EDIF file to bom db values.. ");
 			bom_compare();
+
 			Console.WriteLine("Done creating error list.");
 		}
 
@@ -88,30 +89,30 @@ namespace BOM_Checker
 				part_mismatch auxs = new part_mismatch("aux mismatch");
 				auxs.edif_aux = edif.value;
 				if (edif.value.Contains("v"))
-					auxs.mrp_aux = partmast[1].ToString();
+					auxs.mrp_aux = new String(partmast[1].ToString().Where(ch => !char.IsWhiteSpace(ch)).ToArray());
 				else if (edif.value.Contains("w"))
-					auxs.mrp_aux = partmast[2].ToString();
+					auxs.mrp_aux = new String(partmast[2].ToString().Where(ch => !char.IsWhiteSpace(ch)).ToArray());
 				assign_error_name(edif, auxs);
 			}//if aux(V or W) rating of component doesn't match (wattage or voltage)
 			if (!compare[1])
 			{
 				part_mismatch footprints = new part_mismatch("footprint mismatch");
 				footprints.edif_footprint = edif.footprint;
-				footprints.mrp_footprint = partmast[3].ToString();
+				footprints.mrp_footprint = new String(partmast[3].ToString().Where(ch => !char.IsWhiteSpace(ch)).ToArray());
 				assign_error_name(edif, footprints);
 			}//if footprint doesn't match
 			if (!compare[2])
 			{
 				part_mismatch values = new part_mismatch("value mismatch");
 				values.edif_value = edif.value;
-				values.mrp_value = partmast[4].ToString();
+				values.mrp_value = new String(partmast[4].ToString().Where(ch => !char.IsWhiteSpace(ch)).ToArray());
 				assign_error_name(edif, values);
 			}// if value of component don't match
 			if (!compare[3])
 			{
 				part_mismatch packages = new part_mismatch("package mismatch");
 				packages.edif_package = edif.package;
-				packages.mrp_package = partmast[5].ToString();
+				packages.mrp_package = new String(partmast[5].ToString().Where(ch => !char.IsWhiteSpace(ch)).ToArray());
 				assign_error_name(edif, packages);
 			}// if package of component doesnt match
 		} //if there is a false then adds to error_list and fills the data.
