@@ -1,4 +1,7 @@
-﻿using System;
+﻿//Nabeel Ziauddin - Innovative Circuits Engineering
+//v1.0 12/13/18 completed
+
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -15,7 +18,7 @@ namespace BOM_Checker
 {
 	public partial class Form1 : Form
 	{
-		string path = "C:\\temp\\TEST1077_Schematic.EDF"; //temrporary hardcode
+		string edif_path = "C:\\temp\\TEST1077_Schematic.EDF"; //temrporary hardcode
 		string bomno = "814-1077"; //temporary hardcode
 		List<component> edif_list, bom_component_list = new List<component>();
 		DataTable partmast_data, bom_data = new DataTable();
@@ -24,6 +27,9 @@ namespace BOM_Checker
 		public Form1()
 		{
 			InitializeComponent();
+
+			textBox_status.Text += "Loaded BOM Checker Software - " + DateTime.Now.ToLongDateString() + Environment.NewLine;
+			textBox_status.Select(textBox_status.Text.Length, 0);
 		}
 
 		private void button1_Click(object sender, EventArgs e) //find edif file button
@@ -35,7 +41,7 @@ namespace BOM_Checker
 				if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
 				{
 					textbox_edif.Text = dialog.FileName;
-					path = dialog.FileName;
+					edif_path = dialog.FileName;
 				} //set path to variables
 			}
 			catch
@@ -76,7 +82,7 @@ namespace BOM_Checker
 		private void edif_worker_DoWork(object sender, DoWorkEventArgs e)
 		{
 			Console.WriteLine("Reading EDIF file...");
-			var file_contents = read_edif_file(path);  //read in the file into memory
+			var file_contents = read_edif_file(edif_path);  //read in the file into memory
 			Console.WriteLine("Parsing EDIF file...");
 			var filtered_file = filter_edif_file(file_contents);  //pick out the instances
 			Console.WriteLine("Consolidating part instances...");
@@ -91,22 +97,50 @@ namespace BOM_Checker
 			bomno = textbox_bomno.Text;
 		}
 
+		private void button_excel_Click(object sender, EventArgs e)
+		{
+			if (error_list.Count == 0)
+				MessageBox.Show("No errors to export.");
+		}
+
+		private void button_clear_Click(object sender, EventArgs e)
+		{
+			textBox_status.Text = "";
+		}
+
 		private void button_compare_Click(object sender, EventArgs e)
 		{
-			BackgroundWorker compare_worker = new BackgroundWorker();
-			compare_worker.DoWork += Compare_worker_DoWork;
-			compare_worker.RunWorkerCompleted += Compare_worker_RunWorkerCompleted;
-			compare_worker.RunWorkerAsync();
+			error_list.Clear();
+			//clear the list incase it is clicked again.
+
+			string edif_file = edif_path.Substring(edif_path.LastIndexOf("\\") + 1, edif_path.Length - edif_path.LastIndexOf("\\") - 1);
+			textBox_status.Text += "Comparing " + edif_file + " to PCMRP database..." + Environment.NewLine;
+
+			if (edif_path == null)
+				MessageBox.Show("Please enter EDIF file path.");
+			else if (bomno == null)
+				MessageBox.Show("Please enter BOM number.");
+			else
+			{
+				BackgroundWorker compare_worker = new BackgroundWorker();
+				compare_worker.DoWork += Compare_worker_DoWork;
+				compare_worker.RunWorkerCompleted += Compare_worker_RunWorkerCompleted;
+				compare_worker.RunWorkerAsync();
+			}//normal operation
 		}
 
 		private void Compare_worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
 		{
+			textBox_status.Text += "Done" + Environment.NewLine;
+
 			foreach (part_mismatch error in error_list)
 			{
 				textBox_status.Text += error.name + "(" + error.partno.ToUpper() + ")" + ": " + error.error 
 					+ " (" + error.string_mismatch() + ")" + Environment.NewLine;
-			}
-			//build excel file and populate textbox in here.
+			}//populate textbox
+
+			textBox_status.Select(textBox_status.Text.Length - 1, 1);
+			textBox_status.ScrollToCaret();
 		}//occurs after comparison is done.
 	}
 }
