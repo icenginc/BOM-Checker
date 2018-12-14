@@ -19,6 +19,7 @@ namespace BOM_Checker
 	public partial class Form1 : Form
 	{
 		string edif_path = "C:\\temp\\TEST1077_Schematic.EDF"; //temrporary hardcode
+		string excel_path = "C:\\temp\\"; //temprary hardcode
 		string bomno = "814-1077"; //temporary hardcode
 		List<component> edif_list, bom_component_list = new List<component>();
 		DataTable partmast_data, bom_data = new DataTable();
@@ -101,6 +102,13 @@ namespace BOM_Checker
 		{
 			if (error_list.Count == 0)
 				MessageBox.Show("No errors to export.");
+			else
+			{
+				export_to_excel();
+				Console.WriteLine("Finished building Excel file");
+				string excel_file = excel_path.Substring(excel_path.LastIndexOf("\\") + 1, excel_path.Length - excel_path.LastIndexOf("\\") - 1);
+				textBox_status.Text += "Exported to Excel file at " + excel_path + Environment.NewLine;
+			}
 		}
 
 		private void button_clear_Click(object sender, EventArgs e)

@@ -300,7 +300,7 @@
 			// 
 			// button_excel
 			// 
-			this.button_excel.Enabled = false;
+			this.button_excel.Enabled = true;
 			this.button_excel.Location = new System.Drawing.Point(12, 9);
 			this.button_excel.Name = "button_excel";
 			this.button_excel.Size = new System.Drawing.Size(115, 39);
