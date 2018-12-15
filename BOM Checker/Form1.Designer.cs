@@ -54,10 +54,10 @@
 			this.button_excel = new System.Windows.Forms.Button();
 			this.pictureBox1 = new System.Windows.Forms.PictureBox();
 			this.panel3 = new System.Windows.Forms.Panel();
+			this.button_output = new System.Windows.Forms.Button();
 			this.button_clear = new System.Windows.Forms.Button();
 			this.label8 = new System.Windows.Forms.Label();
 			this.label9 = new System.Windows.Forms.Label();
-			this.button_output = new System.Windows.Forms.Button();
 			this.panel1.SuspendLayout();
 			this.panel2.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -125,9 +125,9 @@
 			this.label4.AutoSize = true;
 			this.label4.Location = new System.Drawing.Point(14, 279);
 			this.label4.Name = "label4";
-			this.label4.Size = new System.Drawing.Size(40, 13);
+			this.label4.Size = new System.Drawing.Size(75, 13);
 			this.label4.TabIndex = 18;
-			this.label4.Text = "Status:";
+			this.label4.Text = "Status Output:";
 			// 
 			// panel1
 			// 
@@ -300,7 +300,7 @@
 			// 
 			// button_excel
 			// 
-			this.button_excel.Enabled = true;
+			this.button_excel.Enabled = false;
 			this.button_excel.Location = new System.Drawing.Point(12, 9);
 			this.button_excel.Name = "button_excel";
 			this.button_excel.Size = new System.Drawing.Size(115, 39);
@@ -332,6 +332,17 @@
 			this.panel3.Size = new System.Drawing.Size(139, 103);
 			this.panel3.TabIndex = 23;
 			// 
+			// button_output
+			// 
+			this.button_output.Location = new System.Drawing.Point(12, 51);
+			this.button_output.Name = "button_output";
+			this.button_output.Size = new System.Drawing.Size(115, 21);
+			this.button_output.TabIndex = 23;
+			this.button_output.Text = "Expand Output";
+			this.button_output.UseMnemonic = false;
+			this.button_output.UseVisualStyleBackColor = true;
+			this.button_output.Click += new System.EventHandler(this.button_output_Click);
+			// 
 			// button_clear
 			// 
 			this.button_clear.Location = new System.Drawing.Point(12, 75);
@@ -362,17 +373,6 @@
 			this.label9.Size = new System.Drawing.Size(221, 13);
 			this.label9.TabIndex = 25;
 			this.label9.Text = "Customer Excel to Schematic(EDIF) Checker:";
-			// 
-			// button_output
-			// 
-			this.button_output.Enabled = false;
-			this.button_output.Location = new System.Drawing.Point(12, 51);
-			this.button_output.Name = "button_output";
-			this.button_output.Size = new System.Drawing.Size(115, 21);
-			this.button_output.TabIndex = 23;
-			this.button_output.Text = "Open Output";
-			this.button_output.UseMnemonic = false;
-			this.button_output.UseVisualStyleBackColor = true;
 			// 
 			// Form1
 			// 

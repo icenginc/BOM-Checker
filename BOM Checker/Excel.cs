@@ -18,7 +18,7 @@ namespace BOM_Checker
 				dialog.InitialDirectory = "\\\\backup-server\\Assembly Drawings\\";
 				if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
 				{
-					excel_path = dialog.FileName;
+					excel_path = dialog.FileName + ".xlsx";
 				} //set path to variables
 			}
 			catch
@@ -49,7 +49,7 @@ namespace BOM_Checker
 				using (var package = new ExcelPackage())
 				{
 					ExcelWorkbook workbook = package.Workbook;
-					ExcelWorksheet worksheet = workbook.Worksheets.Add(("Data Comparison"));
+					ExcelWorksheet worksheet = workbook.Worksheets.Add(("BOM " + bomno.ToUpper()));
 					
 					//----------------------------EDIF to PCMRP section-----------------------//
 					var header = worksheet.Cells["A1:O1"]; //header columns

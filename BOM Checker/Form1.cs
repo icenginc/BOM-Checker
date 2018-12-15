@@ -106,14 +106,30 @@ namespace BOM_Checker
 			{
 				export_to_excel();
 				Console.WriteLine("Finished building Excel file");
-				string excel_file = excel_path.Substring(excel_path.LastIndexOf("\\") + 1, excel_path.Length - excel_path.LastIndexOf("\\") - 1);
+
+				//string excel_file = excel_path.Substring(excel_path.LastIndexOf("\\") + 1, excel_path.Length - excel_path.LastIndexOf("\\") - 1);
 				textBox_status.Text += "Exported to Excel file at " + excel_path + Environment.NewLine;
+				textBox_status.Select(textBox_status.Text.Length - 1, 1);
+				textBox_status.ScrollToCaret();
 			}
 		}
 
 		private void button_clear_Click(object sender, EventArgs e)
 		{
 			textBox_status.Text = "";
+			excel_path = null;
+			edif_path = null;
+			bomno = null;
+			edif_list.Clear();
+			bom_component_list.Clear();
+			error_list.Clear();
+			button_excel.Enabled = false;
+		} //resets program to launch state
+
+		private void button_output_Click(object sender, EventArgs e)
+		{
+			Form2 form2 = new Form2(textBox_status.Text);
+			form2.Show();
 		}
 
 		private void button_compare_Click(object sender, EventArgs e)
@@ -149,6 +165,9 @@ namespace BOM_Checker
 
 			textBox_status.Select(textBox_status.Text.Length - 1, 1);
 			textBox_status.ScrollToCaret();
+
+			if (error_list.Count > 0)
+				button_excel.Enabled = true;
 		}//occurs after comparison is done.
 	}
 }
