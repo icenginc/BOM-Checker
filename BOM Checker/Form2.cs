@@ -16,7 +16,7 @@ namespace BOM_Checker
 		{
 			InitializeComponent();
 			textBox_contents.Text = contents;
-			textBox_contents.Select(textBox_contents.Text.Length - 1, 1);
+			textBox_contents.Select(textBox_contents.Text.Length, 1);
 			textBox_contents.ScrollToCaret();
 		}
 	}

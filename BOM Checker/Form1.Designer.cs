@@ -35,14 +35,14 @@
 			this.textBox_status = new System.Windows.Forms.TextBox();
 			this.label4 = new System.Windows.Forms.Label();
 			this.panel1 = new System.Windows.Forms.Panel();
-			this.button1 = new System.Windows.Forms.Button();
+			this.button_edif_file = new System.Windows.Forms.Button();
 			this.textbox_bomno = new System.Windows.Forms.TextBox();
 			this.textbox_edif = new System.Windows.Forms.TextBox();
 			this.label2 = new System.Windows.Forms.Label();
 			this.label1 = new System.Windows.Forms.Label();
 			this.panel2 = new System.Windows.Forms.Panel();
+			this.button_edif_file2 = new System.Windows.Forms.Button();
 			this.button_customer_excel = new System.Windows.Forms.Button();
-			this.button2 = new System.Windows.Forms.Button();
 			this.textBox1 = new System.Windows.Forms.TextBox();
 			this.textBox2 = new System.Windows.Forms.TextBox();
 			this.button3 = new System.Windows.Forms.Button();
@@ -132,7 +132,7 @@
 			// panel1
 			// 
 			this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.panel1.Controls.Add(this.button1);
+			this.panel1.Controls.Add(this.button_edif_file);
 			this.panel1.Controls.Add(this.textbox_bomno);
 			this.panel1.Controls.Add(this.textbox_edif);
 			this.panel1.Controls.Add(this.button_compare);
@@ -146,14 +146,15 @@
 			this.panel1.Size = new System.Drawing.Size(534, 80);
 			this.panel1.TabIndex = 19;
 			// 
-			// button1
+			// button_edif_file
 			// 
-			this.button1.Location = new System.Drawing.Point(347, 48);
-			this.button1.Name = "button1";
-			this.button1.Size = new System.Drawing.Size(24, 21);
-			this.button1.TabIndex = 16;
-			this.button1.Text = "...";
-			this.button1.UseVisualStyleBackColor = true;
+			this.button_edif_file.Location = new System.Drawing.Point(347, 48);
+			this.button_edif_file.Name = "button_edif_file";
+			this.button_edif_file.Size = new System.Drawing.Size(24, 21);
+			this.button_edif_file.TabIndex = 16;
+			this.button_edif_file.Text = "...";
+			this.button_edif_file.UseVisualStyleBackColor = true;
+			this.button_edif_file.Click += new System.EventHandler(this.button_edif_file_Click);
 			// 
 			// textbox_bomno
 			// 
@@ -161,6 +162,7 @@
 			this.textbox_bomno.Name = "textbox_bomno";
 			this.textbox_bomno.Size = new System.Drawing.Size(73, 20);
 			this.textbox_bomno.TabIndex = 15;
+			this.textbox_bomno.TextChanged += new System.EventHandler(this.textbox_bomno_textchanged);
 			// 
 			// textbox_edif
 			// 
@@ -168,6 +170,7 @@
 			this.textbox_edif.Name = "textbox_edif";
 			this.textbox_edif.Size = new System.Drawing.Size(215, 20);
 			this.textbox_edif.TabIndex = 14;
+			this.textbox_edif.TextChanged += new System.EventHandler(this.textbox_edif_TextChanged);
 			// 
 			// label2
 			// 
@@ -190,8 +193,8 @@
 			// panel2
 			// 
 			this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.panel2.Controls.Add(this.button_edif_file2);
 			this.panel2.Controls.Add(this.button_customer_excel);
-			this.panel2.Controls.Add(this.button2);
 			this.panel2.Controls.Add(this.textBox1);
 			this.panel2.Controls.Add(this.textBox2);
 			this.panel2.Controls.Add(this.button3);
@@ -206,23 +209,23 @@
 			this.panel2.Size = new System.Drawing.Size(534, 80);
 			this.panel2.TabIndex = 20;
 			// 
+			// button_edif_file2
+			// 
+			this.button_edif_file2.Location = new System.Drawing.Point(347, 27);
+			this.button_edif_file2.Name = "button_edif_file2";
+			this.button_edif_file2.Size = new System.Drawing.Size(24, 21);
+			this.button_edif_file2.TabIndex = 17;
+			this.button_edif_file2.Text = "...";
+			this.button_edif_file2.UseVisualStyleBackColor = true;
+			// 
 			// button_customer_excel
 			// 
-			this.button_customer_excel.Location = new System.Drawing.Point(347, 27);
+			this.button_customer_excel.Location = new System.Drawing.Point(347, 48);
 			this.button_customer_excel.Name = "button_customer_excel";
 			this.button_customer_excel.Size = new System.Drawing.Size(24, 21);
-			this.button_customer_excel.TabIndex = 17;
+			this.button_customer_excel.TabIndex = 16;
 			this.button_customer_excel.Text = "...";
 			this.button_customer_excel.UseVisualStyleBackColor = true;
-			// 
-			// button2
-			// 
-			this.button2.Location = new System.Drawing.Point(347, 48);
-			this.button2.Name = "button2";
-			this.button2.Size = new System.Drawing.Size(24, 21);
-			this.button2.TabIndex = 16;
-			this.button2.Text = "...";
-			this.button2.UseVisualStyleBackColor = true;
 			// 
 			// textBox1
 			// 
@@ -409,14 +412,14 @@
 		private System.Windows.Forms.TextBox textBox_status;
 		private System.Windows.Forms.Label label4;
 		private System.Windows.Forms.Panel panel1;
-		private System.Windows.Forms.Button button1;
+		private System.Windows.Forms.Button button_edif_file;
 		private System.Windows.Forms.TextBox textbox_bomno;
 		private System.Windows.Forms.TextBox textbox_edif;
 		private System.Windows.Forms.Label label2;
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.Panel panel2;
+		private System.Windows.Forms.Button button_edif_file2;
 		private System.Windows.Forms.Button button_customer_excel;
-		private System.Windows.Forms.Button button2;
 		private System.Windows.Forms.TextBox textBox1;
 		private System.Windows.Forms.TextBox textBox2;
 		private System.Windows.Forms.Button button3;

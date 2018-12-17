@@ -9,7 +9,7 @@ class part_mismatch
 	public string mrp_footprint, edif_footprint;
 	public string mrp_aux, edif_aux; //also called 'wattage/voltage'in altium
 	public string mrp_instances, edif_instances;
-	public List<string> mrp_instance_names, edif_instance_names = new List<string>();
+	public List<string> mrp_instance_names = new List<string>(), edif_instance_names = new List<string>();
 	public string name;
 	public string error;
 

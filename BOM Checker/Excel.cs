@@ -41,9 +41,16 @@ namespace BOM_Checker
 
 				foreach (part_mismatch x in error_list)
 				{
+					string edif_instance_names = "", mrp_instance_names = "";
+
+					foreach (string name in x.edif_instance_names)
+						edif_instance_names += name + "; ";
+					foreach (string name in x.mrp_instance_names)
+						mrp_instance_names += name + "; ";
+
 					data1.Rows.Add(x.name, x.partno.ToUpper(), x.error, x.edif_value, x.mrp_value, x.edif_aux, x.mrp_aux,
 						x.edif_footprint, x.mrp_footprint, x.edif_package, x.mrp_package, x.edif_instances, x.mrp_instances,
-						x.edif_instance_names, x.mrp_instance_names); //populate data table
+						edif_instance_names, mrp_instance_names); //populate data table
 				}
 
 				using (var package = new ExcelPackage())

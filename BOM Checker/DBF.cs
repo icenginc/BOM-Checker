@@ -31,8 +31,14 @@ namespace BOM_Checker
 				OleDbCommand MyQuery = new OleDbCommand(mySQL, connection);
 				OleDbDataAdapter DA = new OleDbDataAdapter(MyQuery);
 
-				DA.Fill(results);
-
+				try
+				{
+					DA.Fill(results);
+				}
+				catch(System.Data.OleDb.OleDbException)
+				{
+					MessageBox.Show("Invalid data, unable to fill datatable!");
+				}
 				connection.Close();
 			}
 
@@ -46,7 +52,10 @@ namespace BOM_Checker
 			if (bomno == "" || !bomno.Contains("-"))
 			{
 				MessageBox.Show("Invalid BOM Number entry!");
-				throw new InvalidDataException();
+				this.Invoke((MethodInvoker)delegate
+				{
+					button_clear.PerformClick(); //do a clear
+				});
 			}
 				
 
@@ -107,9 +116,18 @@ namespace BOM_Checker
 
 			foreach (string part_num in part_nums)
 				part_list += ("'" + part_num + "', ");
-
-			part_list = part_list.Substring(0, part_list.Length - 2); //cut off the last ", "
-
+			try
+			{
+				part_list = part_list.Substring(0, part_list.Length - 2); //cut off the last ", "
+			}
+			catch (System.ArgumentOutOfRangeException)
+			{
+				MessageBox.Show("No parts found, not a valid EDIF file!");
+				this.Invoke((MethodInvoker)delegate
+				{
+					button_clear.PerformClick(); //do a clear
+				});
+			}
 			return part_list;
 		} //this function returns a string list of the parts in the edif component list
 

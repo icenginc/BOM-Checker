@@ -24,6 +24,7 @@ namespace BOM_Checker
 		List<component> edif_list, bom_component_list = new List<component>();
 		DataTable partmast_data, bom_data = new DataTable();
 		List<part_mismatch> error_list = new List<part_mismatch>(); //to store errors in
+		bool stop = false;
 
 		public Form1()
 		{
@@ -31,24 +32,6 @@ namespace BOM_Checker
 
 			textBox_status.Text += "Loaded BOM Checker Software - " + DateTime.Now.ToLongDateString() + Environment.NewLine;
 			textBox_status.Select(textBox_status.Text.Length, 0);
-		}
-
-		private void button1_Click(object sender, EventArgs e) //find edif file button
-		{
-			try
-			{
-				CommonOpenFileDialog dialog = new CommonOpenFileDialog(); //run in Nuget -> Install-Package Microsoft.WindowsAPICodePack-Shell -Version 1.1.0
-				dialog.InitialDirectory = "\\\\backup-server\\Assembly Drawings\\";
-				if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
-				{
-					textbox_edif.Text = dialog.FileName;
-					edif_path = dialog.FileName;
-				} //set path to variables
-			}
-			catch
-			{
-				MessageBox.Show("Error in file select");
-			}
 		}
 
 		private void button_parse_Click(object sender, EventArgs e)
@@ -117,12 +100,17 @@ namespace BOM_Checker
 		private void button_clear_Click(object sender, EventArgs e)
 		{
 			textBox_status.Text = "";
+			textbox_edif.Text = "";
+			textbox_bomno.Text = "";
 			excel_path = null;
 			edif_path = null;
 			bomno = null;
-			edif_list.Clear();
-			bom_component_list.Clear();
-			error_list.Clear();
+			if (edif_list != null)
+			{
+				edif_list.Clear();
+				bom_component_list.Clear();
+				error_list.Clear();
+			}
 			button_excel.Enabled = false;
 		} //resets program to launch state
 
@@ -132,13 +120,34 @@ namespace BOM_Checker
 			form2.Show();
 		}
 
+		private void button_edif_file_Click(object sender, EventArgs e)
+		{
+			try
+			{
+				CommonOpenFileDialog dialog = new CommonOpenFileDialog(); //run in Nuget -> Install-Package Microsoft.WindowsAPICodePack-Shell -Version 1.1.0
+				dialog.InitialDirectory = "\\\\backup-server\\Assembly Drawings\\";
+				if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
+				{
+					textbox_edif.Text = dialog.FileName;
+					//edif_path = dialog.FileName;
+				} //set path to variables
+			}
+			catch
+			{
+				MessageBox.Show("Error in file select");
+				stop = true;
+			}
+		}
+
+		private void textbox_edif_TextChanged(object sender, EventArgs e)
+		{
+			edif_path = textbox_edif.Text;
+		}
+
 		private void button_compare_Click(object sender, EventArgs e)
 		{
 			error_list.Clear();
 			//clear the list incase it is clicked again.
-
-			string edif_file = edif_path.Substring(edif_path.LastIndexOf("\\") + 1, edif_path.Length - edif_path.LastIndexOf("\\") - 1);
-			textBox_status.Text += "Comparing " + edif_file + " to PCMRP database..." + Environment.NewLine;
 
 			if (edif_path == null)
 				MessageBox.Show("Please enter EDIF file path.");
@@ -146,6 +155,9 @@ namespace BOM_Checker
 				MessageBox.Show("Please enter BOM number.");
 			else
 			{
+				string edif_file = edif_path.Substring(edif_path.LastIndexOf("\\") + 1, edif_path.Length - edif_path.LastIndexOf("\\") - 1);
+				textBox_status.Text += "Comparing " + edif_file + " to PCMRP database..." + Environment.NewLine;
+
 				BackgroundWorker compare_worker = new BackgroundWorker();
 				compare_worker.DoWork += Compare_worker_DoWork;
 				compare_worker.RunWorkerCompleted += Compare_worker_RunWorkerCompleted;
@@ -155,7 +167,8 @@ namespace BOM_Checker
 
 		private void Compare_worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
 		{
-			textBox_status.Text += "Done" + Environment.NewLine;
+			if(edif_path != "" && bomno != "")
+				textBox_status.Text += "Done" + Environment.NewLine;
 
 			foreach (part_mismatch error in error_list)
 			{

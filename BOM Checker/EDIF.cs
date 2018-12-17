@@ -31,6 +31,12 @@ namespace BOM_Checker
 			catch
 			{
 				Console.WriteLine("Error in reading EDIF file");
+				MessageBox.Show("Error reading EDIF file, not valid!");
+				stop = true;
+				this.Invoke((MethodInvoker)delegate
+				{
+					button_clear.PerformClick(); //do a clear
+				});
 			}
 			return file_contents;
 		} //read EDIF file into a string list
