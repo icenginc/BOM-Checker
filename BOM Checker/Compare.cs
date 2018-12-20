@@ -86,7 +86,7 @@ namespace BOM_Checker
 		{
 			foreach (component component in edif_list)
 			{
-				bool[] compare = Enumerable.Repeat<bool>(false, 4).ToArray(); //by default, each element does not match
+				bool[] compare = Enumerable.Repeat<bool>(false, 5).ToArray(); //by default, each element does not match
 				string partno = component.partno.ToUpper();
 				DataRow datarow = partmast_data.NewRow(); //placeholder row to use conditional below
 				if (partno != "")
@@ -99,14 +99,15 @@ namespace BOM_Checker
 				}
 
 				//pass both edif and partmast values into unit parse then compare
-				if (component.value.Contains("v"))
+				if (component.value.Contains("V"))
 					compare[0] = compare_values(unit_parse(component.value), unit_parse(datarow[1].ToString()));
-				else if (component.value.Contains("w"))
+				else if (component.value.Contains("W"))
 					compare[0] = compare_values(unit_parse(component.value), unit_parse(datarow[2].ToString()));
 
 				compare[1] = compare_values(component.footprint, datarow[3].ToString()); //footprint mrp and footprint edif
 				compare[2] = compare_values(unit_parse(component.comment), unit_parse(datarow[4].ToString())); //value mrp and comment edif
 				compare[3] = compare_values(unit_parse(component.package), unit_parse(datarow[5].ToString())); //packtype mrp and package edif
+				compare[4] = compare_values(unit_parse(component.temp), unit_parse(datarow[6].ToString())); //rating mrp and temperature edif
 
 				if (compare.Contains(false))
 					Console.WriteLine(component.name);
@@ -121,9 +122,9 @@ namespace BOM_Checker
 			{
 				part_mismatch auxs = new part_mismatch("aux mismatch");
 				auxs.edif_aux = edif.value;
-				if (edif.value.Contains("v"))
+				if (edif.value.Contains("V"))
 					auxs.mrp_aux = new String(partmast[1].ToString().Where(ch => !char.IsWhiteSpace(ch)).ToArray());
-				else if (edif.value.Contains("w"))
+				else if (edif.value.Contains("W"))
 					auxs.mrp_aux = new String(partmast[2].ToString().Where(ch => !char.IsWhiteSpace(ch)).ToArray());
 				assign_error_name(edif, auxs);
 			}//if aux(V or W) rating of component doesn't match (wattage or voltage)
@@ -148,6 +149,10 @@ namespace BOM_Checker
 				packages.mrp_package = new String(partmast[5].ToString().Where(ch => !char.IsWhiteSpace(ch)).ToArray());
 				assign_error_name(edif, packages);
 			}// if package of component doesnt match
+			if (!compare[4])
+			{
+
+			}//if temperatuer or fomponent doesnt match
 		} //if there is a false then adds to error_list and fills the data.
 
 		private void build_error_list(bool[] compare, component edif, component bom) //overload for bom 
@@ -220,7 +225,7 @@ namespace BOM_Checker
 				value /= 1000000;
 			if (input.Contains("p"))//pico
 				value /= 1000000000000;
-			if (input.Contains("k") || input.Contains("K"))//kilo
+			if (input.Contains("K"))//kilo
 				value *= 1000;
 			if (input.Contains("M"))//mega
 				value *= 1000000;

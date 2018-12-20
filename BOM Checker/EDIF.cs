@@ -4,7 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Data.OleDb;
@@ -47,19 +47,23 @@ namespace BOM_Checker
 			for (int i = 0; i < edif_file.Count; i++)
 			{
 				string line = edif_file[i];
-				if (line.Contains("(Instance C") || line.Contains("(Instance R"))
+				if (line.Contains("(Instance "))
 				{
-					component instance = new component();
-					instance.assign_name(line); //put the name in
+					string raw_text = string.Empty;
+					raw_text += line; //add in teh instance name line -> but wait! causes fail in raw text match
 					for (int j = 0; j < 25; j++)
 					{
 						line = edif_file[i + j];
 						if (line.Contains("Property") && line.Contains("String") && !line.Contains("UniqueId"))
-							instance.raw_text += line;
+							raw_text += line;
 					}
-					instance.raw_text = instance.raw_text.ToLower();
-					if(!instance.raw_text.Contains("dni")) //dont save if its a DNI
-						components.Add(instance);
+
+					var instance = return_object
+						(raw_text);
+
+					if (instance is component)
+						components = add_component(components, (component)instance); //if reistor or capacitor
+					
 				} //save next 25 lines if so, then save the object
 			}
 			return components;
@@ -69,11 +73,14 @@ namespace BOM_Checker
 		{
 			for (int i = 0; i < filtered_list.Count; i ++)
 			{
-				for(int j = 0; j < filtered_list.Count; j++)
+				string str1 = filtered_list[i].raw_text;
+
+				for (int j = 0; j < filtered_list.Count; j++)
 				{
+					string str2 = filtered_list[j].raw_text;
 					if (j > i)//pick the first one then compare all else 
 					{
-						if (filtered_list[i].raw_text == filtered_list[j].raw_text)
+						if (str1.Substring(str1.IndexOf("Property")) == str2.Substring(str2.IndexOf("Property")))
 						{
 							string instance = filtered_list[j].name;
 							filtered_list.RemoveAt(j);
@@ -88,6 +95,39 @@ namespace BOM_Checker
 			return filtered_list;
 
 		}
+
+		private Object return_object(string raw_text)
+		{
+			int index = raw_text.IndexOf("PARTNO") + 16; //skips the PACKAGE (String "
+			int quote_index = raw_text.IndexOf('\"', index);
+			string partno = raw_text.Substring(index, quote_index - index);
+
+			if (partno.Length > 3) //found a partno
+				partno = partno.Substring(0, 3); //get prefix
+			else
+				return -1;
+
+			if (partno[0] == '3')
+				return new component(raw_text); //capactior
+			else if (partno[0] == '4')
+				return new component(raw_text); //resistor
+			else
+				return -1; //not found
+		}
+
+		private List<component> add_component(List<component> components, component instance)
+		{
+			instance.assign_name(instance.raw_text); //put the name in
+
+			instance.raw_text = Regex.Replace(instance.raw_text, "voltage", "voltage", RegexOptions.IgnoreCase);
+			instance.raw_text = Regex.Replace(instance.raw_text, "wattage", "wattage", RegexOptions.IgnoreCase);
+			instance.raw_text = Regex.Replace(instance.raw_text, "package", "package", RegexOptions.IgnoreCase);
+
+			if (!instance.raw_text.Contains("DNI")) //dont save if its a DNI
+				components.Add(instance);
+
+			return components;
+		} //take the component list, modify isntance, add to component list, return
 
 		private List<component> assign_members(List<component> consolidated_list)
 		{

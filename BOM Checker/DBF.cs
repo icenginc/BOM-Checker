@@ -27,7 +27,7 @@ namespace BOM_Checker
 
 			if (connection.State == ConnectionState.Open)
 			{
-				string mySQL = "SELECT `partno`, `aux1`, `aux2`, `footprint`, `value`, `packtype` FROM PARTMAST WHERE `partno` IN (" + part_list + ")";  // dbf table + columns
+				string mySQL = "SELECT `partno`, `aux1`, `aux2`, `footprint`, `value`, `packtype`, `rating` FROM PARTMAST WHERE `partno` IN (" + part_list + ")";  // dbf table + columns
 				OleDbCommand MyQuery = new OleDbCommand(mySQL, connection);
 				OleDbDataAdapter DA = new OleDbDataAdapter(MyQuery);
 
@@ -93,7 +93,7 @@ namespace BOM_Checker
 
 				new_component.assign_members_bom();
 				string temp = new_component.instance_names[0]; //first part name from each row -> to make next lien more readable
-				if ((temp.StartsWith("R") || temp.StartsWith("C")) && Char.IsDigit(temp[1])) //if starts with C or R, and has a number after that
+				//if ((temp.StartsWith("R") || temp.StartsWith("C")) && Char.IsDigit(temp[1])) //if starts with C or R, and has a number after that
 					bom_list.Add(new_component);
 			}//loop through all entries in db
 

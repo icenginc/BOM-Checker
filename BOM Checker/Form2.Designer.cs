@@ -39,14 +39,14 @@
 			this.textBox_contents.Name = "textBox_contents";
 			this.textBox_contents.ReadOnly = true;
 			this.textBox_contents.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-			this.textBox_contents.Size = new System.Drawing.Size(484, 554);
+			this.textBox_contents.Size = new System.Drawing.Size(484, 608);
 			this.textBox_contents.TabIndex = 0;
 			// 
 			// Form2
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(508, 578);
+			this.ClientSize = new System.Drawing.Size(508, 632);
 			this.Controls.Add(this.textBox_contents);
 			this.Name = "Form2";
 			this.Text = "Output Viewer";
