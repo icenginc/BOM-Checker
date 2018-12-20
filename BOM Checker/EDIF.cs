@@ -62,7 +62,9 @@ namespace BOM_Checker
 						(raw_text);
 
 					if (instance is component)
+					{
 						components = add_component(components, (component)instance); //if reistor or capacitor
+					}
 					
 				} //save next 25 lines if so, then save the object
 			}
@@ -73,14 +75,13 @@ namespace BOM_Checker
 		{
 			for (int i = 0; i < filtered_list.Count; i ++)
 			{
-				string str1 = filtered_list[i].raw_text;
-
+				string str1 = filtered_list[i].raw_text.Substring(filtered_list[i].raw_text.IndexOf("Property"));
 				for (int j = 0; j < filtered_list.Count; j++)
 				{
-					string str2 = filtered_list[j].raw_text;
+					string str2 = filtered_list[j].raw_text.Substring(filtered_list[j].raw_text.IndexOf("Property"));
 					if (j > i)//pick the first one then compare all else 
 					{
-						if (str1.Substring(str1.IndexOf("Property")) == str2.Substring(str2.IndexOf("Property")))
+						if (str1 == str2)
 						{
 							string instance = filtered_list[j].name;
 							filtered_list.RemoveAt(j);
@@ -117,11 +118,11 @@ namespace BOM_Checker
 
 		private List<component> add_component(List<component> components, component instance)
 		{
-			instance.assign_name(instance.raw_text); //put the name in
-
 			instance.raw_text = Regex.Replace(instance.raw_text, "voltage", "voltage", RegexOptions.IgnoreCase);
 			instance.raw_text = Regex.Replace(instance.raw_text, "wattage", "wattage", RegexOptions.IgnoreCase);
 			instance.raw_text = Regex.Replace(instance.raw_text, "package", "package", RegexOptions.IgnoreCase);
+
+			instance.assign_members(); //put everything in
 
 			if (!instance.raw_text.Contains("DNI")) //dont save if its a DNI
 				components.Add(instance);

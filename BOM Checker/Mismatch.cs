@@ -9,6 +9,7 @@ class part_mismatch
 	public string mrp_footprint, edif_footprint;
 	public string mrp_aux, edif_aux; //also called 'wattage/voltage'in altium
 	public string mrp_instances, edif_instances;
+	public string mrp_temp, edif_temp; //also called 'rating' in mrp
 	public List<string> mrp_instance_names = new List<string>(), edif_instance_names = new List<string>();
 	public string name;
 	public string error;
@@ -26,14 +27,25 @@ class part_mismatch
 			msg = "MRP:" + mrp_value + " | " + "EDIF:" + edif_value;
 		else if (mrp_package != null && edif_package != null)
 			msg = "MRP:" + mrp_package + " | " + "EDIF:" + edif_package;
-		else if(mrp_footprint != null && edif_footprint != null)
+		else if (mrp_footprint != null && edif_footprint != null)
 			msg = "MRP:" + mrp_footprint + " | " + "EDIF:" + edif_footprint;
-		else if(mrp_aux != null && edif_aux != null)
+		else if (mrp_aux != null && edif_aux != null)
 			msg = "MRP:" + mrp_aux + " | " + "EDIF:" + edif_aux;
-		else if(mrp_instances != null && edif_instances != null)
+		else if (mrp_instances != null && edif_instances != null)
 			msg = "MRP:" + mrp_instances + " | " + "EDIF:" + edif_instances;
-		else if(mrp_instance_names.Count != 0 && edif_instance_names.Count != 0)
-			msg = "MRP:" + mrp_instances + " | " + "EDIF:" + edif_instances;
+		else if (mrp_instance_names.Count != 0 && edif_instance_names.Count != 0)
+		{
+			string mrp_names = "", edif_names = "";
+
+			foreach (string name in mrp_instance_names)
+				mrp_names += (name + " ");
+			foreach (string name in edif_instance_names)
+				edif_names += (name + " ");
+
+			msg = "MRP:" + mrp_names + " | " + "EDIF:" + edif_names;
+		}
+		else if (mrp_temp != null && edif_temp != null)
+			msg = "MRP:" + mrp_temp + " | " + "EDIF:" + edif_temp;
 
 		return msg;
 	} //return based on what is populated

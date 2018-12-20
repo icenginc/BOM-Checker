@@ -30,6 +30,7 @@ class component
 
 	public void assign_members()
 	{
+		assign_name();
 		assign_partno();
 		assign_footprint();
 		assign_value();
@@ -81,26 +82,34 @@ class component
 			instances = 0;
 	}//string to float to int conversion (bom database gives string based float)
 
-	public void assign_name(string line)
+	private void assign_name()
 	{
-		int index = line.IndexOf("Instance") + 9; //skips the (Instance "
+		int offset = 9;
+		int index = raw_text.IndexOf("Instance") + offset; //skips the (Instance "
 		
-		name = new String(line.Substring(index, line.IndexOf("(Property") - index).Where(c => !char.IsWhiteSpace(c)).ToArray());
+		name = new String(raw_text.Substring(index, raw_text.IndexOf("(Property") - index).Where(c => !char.IsWhiteSpace(c)).ToArray());
 		instance_names.Add(name); //add itself to the instance names
 	}
 
 	private void assign_package()
 	{
-		int index;
-			index = raw_text.IndexOf("package") + 17; //skips the PACKAGE (String "
-		int quote_index = raw_text.IndexOf('\"', index);
+		int quote_index, offset = 17;
+		int index = raw_text.IndexOf("package") + offset; //skips the PACKAGE (String "
+		if (index - offset > 0)
+			quote_index = raw_text.IndexOf('\"', index);
+		else
+			quote_index = offset - 1;
 		package = raw_text.Substring(index, quote_index - index);
 	}
 
 	private void assign_comment()
 	{
-		int index = raw_text.IndexOf("Comment") + 17; //skips the PACKAGE (String "
-		int quote_index = raw_text.IndexOf('\"', index);
+		int offset = 17;
+		int quote_index, index = raw_text.IndexOf("Comment") + offset; //skips the PACKAGE (String "
+		if (index - offset > 0)
+			quote_index = raw_text.IndexOf('\"', index);
+		else
+			quote_index = offset - 1;
 		comment = raw_text.Substring(index, quote_index - index);
 		
 	}
@@ -113,29 +122,45 @@ class component
 		if (name.Contains("C"))
 				key = "voltage";
 
-		int index = raw_text.IndexOf(key) + 17; //skips the PACKAGE (String "
-		int quote_index = raw_text.IndexOf('\"', index);
+		int offset = 17;
+		int quote_index, index = raw_text.IndexOf(key) + offset; //skips the PACKAGE (String "
+		if (index - offset > 0)
+			quote_index = raw_text.IndexOf('\"', index);
+		else
+			quote_index = offset - 1;
 		value = raw_text.Substring(index, quote_index - index);
 	}
 
 	private void assign_footprint()
 	{
-		int index = raw_text.IndexOf("Footprint") + 19; //skips the PACKAGE (String "
-		int quote_index = raw_text.IndexOf('\"', index);
+		int offset = 19;
+		int quote_index, index = raw_text.IndexOf("Footprint") + offset; //skips the PACKAGE (String "
+		if (index - offset > 0)
+			quote_index = raw_text.IndexOf('\"', index);
+		else
+			quote_index = offset - 1;
 		footprint = raw_text.Substring(index, quote_index - index);
 	}
 
 	private void assign_temp()
 	{
-		int index = raw_text.IndexOf("TEMPERATURE") + 20; //skips the TEMPERATURE (String "
-		int quote_index = raw_text.IndexOf('\"', index);
-		footprint = raw_text.Substring(index, quote_index - index);
+		int offset = 19;
+		int quote_index, index = raw_text.IndexOf("TEMPERATURE") + offset; //skips the TEMPERATURE (String "
+		if (index - offset > 0) //this makes it so if the key is not found, then dont go in here
+			quote_index = raw_text.IndexOf('\"', index);
+		else
+			quote_index = offset - 1;
+		temp = raw_text.Substring(index, quote_index - index);
 	}
 
 	private void assign_partno()
 	{
-		int index = raw_text.IndexOf("PARTNO") + 16; //skips the PACKAGE (String "
-		int quote_index = raw_text.IndexOf('\"', index);
+		int offset = 16;
+		int quote_index, index = raw_text.IndexOf("PARTNO") + offset; //skips the PACKAGE (String "
+		if (index - offset > 0)
+			quote_index = raw_text.IndexOf('\"', index);
+		else
+			quote_index = offset - 1;
 		partno = raw_text.Substring(index, quote_index - index);
 	}
 }

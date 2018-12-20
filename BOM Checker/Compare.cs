@@ -19,11 +19,12 @@ namespace BOM_Checker
 			if (!stop)
 			{
 				Console.WriteLine("Parsing EDIF file...");
-				var filtered_file = filter_edif_file(file_contents);  //pick out the instances
+				var filtered_file = filter_edif_file(file_contents);  //pick out the instances and add values 
 				Console.WriteLine("Consolidating part instances...");
-				var consolidated_list = consolidate_edif_file(filtered_file); //merge identical instances into one
-				Console.WriteLine("Parsing text into values...");
-				edif_list = assign_members(consolidated_list); //fill out class objects from raw text
+				//var consolidated_list
+				edif_list = consolidate_edif_file(filtered_file); //merge identical instances into one
+				//Console.WriteLine("Parsing text into values...");
+				//edif_list = assign_members(consolidated_list); //fill out class objects from raw text
 				Console.WriteLine("Discovered " + edif_list.Count + " unique parts from EDIF file." + Environment.NewLine);
 			}
 			//now doing DB reads
@@ -120,39 +121,64 @@ namespace BOM_Checker
 		{
 			if (!compare[0])
 			{
-				part_mismatch auxs = new part_mismatch("aux mismatch");
+				string error = "Aux mismatch";
+				if (unit_parse(edif.value) == -1 || (edif.value.Contains("V") && unit_parse(partmast[1].ToString()) == -1)
+					|| (unit_parse(partmast[2].ToString()) == -1) && (edif.value.Contains("W"))) //has to differentiate between W or V.
+					error = "Aux missing";
+				part_mismatch auxs = new part_mismatch(error);
+
 				auxs.edif_aux = edif.value;
 				if (edif.value.Contains("V"))
 					auxs.mrp_aux = new String(partmast[1].ToString().Where(ch => !char.IsWhiteSpace(ch)).ToArray());
 				else if (edif.value.Contains("W"))
 					auxs.mrp_aux = new String(partmast[2].ToString().Where(ch => !char.IsWhiteSpace(ch)).ToArray());
+
 				assign_error_name(edif, auxs);
 			}//if aux(V or W) rating of component doesn't match (wattage or voltage)
 			if (!compare[1])
 			{
-				part_mismatch footprints = new part_mismatch("footprint mismatch");
+				string error = "Footprint mismatch";
+				if (unit_parse(edif.footprint) == -1 || unit_parse(partmast[3].ToString()) == -1)
+					error = "Footprint missing";
+				part_mismatch footprints = new part_mismatch(error);
+
 				footprints.edif_footprint = edif.footprint;
 				footprints.mrp_footprint = new String(partmast[3].ToString().Where(ch => !char.IsWhiteSpace(ch)).ToArray());
 				assign_error_name(edif, footprints);
 			}//if footprint doesn't match
 			if (!compare[2])
 			{
-				part_mismatch values = new part_mismatch("value mismatch");
+				string error = "Value mismatch";
+				if (unit_parse(edif.value) == -1 || unit_parse(partmast[4].ToString()) == -1)
+					error = "Value missing";
+				part_mismatch values = new part_mismatch(error);
+
 				values.edif_value = edif.value;
 				values.mrp_value = new String(partmast[4].ToString().Where(ch => !char.IsWhiteSpace(ch)).ToArray());
 				assign_error_name(edif, values);
 			}// if value of component don't match
 			if (!compare[3])
 			{
-				part_mismatch packages = new part_mismatch("package mismatch");
+				string error = "Package mismatch";
+				if (unit_parse(edif.package) == -1 || unit_parse(partmast[5].ToString()) == -1)
+					error = "Package missing";
+				part_mismatch packages = new part_mismatch(error);
+
 				packages.edif_package = edif.package;
 				packages.mrp_package = new String(partmast[5].ToString().Where(ch => !char.IsWhiteSpace(ch)).ToArray());
 				assign_error_name(edif, packages);
 			}// if package of component doesnt match
 			if (!compare[4])
 			{
+				string error = "Temperature mismatch";
+				if (unit_parse(edif.temp) == -1 || unit_parse(partmast[6].ToString()) == -1)
+					error = "Temperature missing";
+				part_mismatch temperatures = new part_mismatch(error);
 
-			}//if temperatuer or fomponent doesnt match
+				temperatures.edif_temp = edif.temp;
+				temperatures.mrp_temp = new String(partmast[6].ToString().Where(ch => !char.IsWhiteSpace(ch)).ToArray());
+				assign_error_name(edif, temperatures);
+			}//if temperatuer of component doesnt match
 		} //if there is a false then adds to error_list and fills the data.
 
 		private void build_error_list(bool[] compare, component edif, component bom) //overload for bom 
@@ -185,6 +211,9 @@ namespace BOM_Checker
 		{
 			bool result;
 
+			if (edif == -1 || dbf == -1)
+				return false;
+
 			if (edif == dbf)
 				result = true;
 			else
@@ -198,6 +227,9 @@ namespace BOM_Checker
 			edif = new String(edif.Where(ch => !char.IsWhiteSpace(ch)).ToArray()).ToLower();
 			dbf = new String(dbf.Where(ch => !char.IsWhiteSpace(ch)).ToArray()).ToLower();
 			//remove whitespace and make lowercase
+
+			if (edif == "" || dbf == "")
+				return false;
 
 			bool result;
 
@@ -214,7 +246,9 @@ namespace BOM_Checker
 		{
 			float value;
 			string striped = new String(input.Where(character => char.IsDigit(character) || char.IsPunctuation(character)).ToArray());
-			if (!float.TryParse(striped.Replace("/", ""), out value) && input != "")
+			if (input.Replace(" ", "") == "")
+				return -1;
+			else if (!float.TryParse(striped.Replace("/", ""), out value) && input != "")
 				throw new System.FormatException();
 
 			if (input.Contains("m"))//milli

@@ -68,11 +68,12 @@ namespace BOM_Checker
 			Console.WriteLine("Reading EDIF file...");
 			var file_contents = read_edif_file(edif_path);  //read in the file into memory
 			Console.WriteLine("Parsing EDIF file...");
-			var filtered_file = filter_edif_file(file_contents);  //pick out the instances
+			var filtered_file = filter_edif_file(file_contents);  //pick out the instances, populate and save them
 			Console.WriteLine("Consolidating part instances...");
-			var consolidated_list = consolidate_edif_file(filtered_file); //merge identical instances into one
-			Console.WriteLine("Parsing text into values...");
-			edif_list = assign_members(consolidated_list); //fill out class objects from raw text
+			//var consolidated_list
+			edif_list = consolidate_edif_file(filtered_file); //merge identical instances into one
+			//Console.WriteLine("Parsing text into values...");
+			//edif_list = assign_members(consolidated_list); //fill out class objects from raw text
 			Console.WriteLine("Discovered " + edif_list.Count + " unique parts from EDIF file." + Environment.NewLine);
 		}
 
