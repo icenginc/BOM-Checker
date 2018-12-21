@@ -98,14 +98,15 @@ namespace BOM_Checker
 					Console.WriteLine(error);
 					part_mismatch name_missing = new part_mismatch(error);
 				}
-				
-			
+
+
 				//pass both edif and partmast values into unit parse then compare
 				if (component.type == 'C' || component.type == 'F')
 					compare[0] = compare_values(unit_parse(component.value), unit_parse(datarow[1].ToString()));
 				else if (component.type == 'R')
 					compare[0] = compare_values(unit_parse(component.value), unit_parse(datarow[2].ToString()));
-
+				else
+					compare[0] = 1; //if it is not the type with an aux, then skip over it
 				compare[1] = compare_values(component.footprint, datarow[3].ToString()); //footprint mrp and footprint edif
 				compare[2] = compare_values(unit_parse(component.comment), unit_parse(datarow[4].ToString())); //value mrp and comment edif
 				compare[3] = compare_values(unit_parse(component.package), unit_parse(datarow[5].ToString())); //packtype mrp and package edif
@@ -201,14 +202,14 @@ namespace BOM_Checker
 		{
 			if (compare[0] != 1)
 			{
-				part_mismatch instances = new part_mismatch("instance mismatch");
+				part_mismatch instances = new part_mismatch("Instance mismatch");
 				instances.edif_instances = edif.instances.ToString();
 				instances.mrp_instances = bom.instances.ToString();
 				assign_error_name(edif, instances);
 			}//if instances of component doesn't match
 			if (compare[1] != 1)
 			{
-				part_mismatch instance_names = new part_mismatch("instance_names mismatch");
+				part_mismatch instance_names = new part_mismatch("Instance Names mismatch");
 				instance_names.edif_instance_names = edif.instance_names;
 				instance_names.mrp_instance_names = bom.instance_names;
 				assign_error_name(edif, instance_names);

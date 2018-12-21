@@ -86,12 +86,14 @@ class component
 			else if (partno[0] == '5')
 				type = 'F';
 			else if (partno[0] == '6')
+			{
 				if (partno[1] == '1')
 					type = 'S';
 				else if (partno[1] == '3')
 					type = 'T';
-				else
-					type = '\0';
+			}
+			else
+				type = '\0';
 		}
 		else
 			type = '\0';
@@ -151,9 +153,6 @@ class component
 		else
 			quote_index = offset - 1;
 		package = raw_text.Substring(index, quote_index - index);
-
-		if (package == "SM")
-			;
 	}
 
 	private void assign_comment()
