@@ -59,7 +59,7 @@ namespace BOM_Checker
 			foreach (component component_edif in edif_list)
 			{
 				//compare edif value with value from bom db (match based on partno, then qty and ref des')
-				bool[] compare = Enumerable.Repeat<bool>(false, 2).ToArray(); //default false
+				int[] compare = new int[2];
 				foreach (component component_bom in bom_component_list)
 				{
 					if (component_edif.partno == component_bom.partno)
@@ -69,9 +69,9 @@ namespace BOM_Checker
 						component_bom.instance_names.Sort();
 						component_edif.instance_names.Sort();
 
-						compare[1] = component_edif.instance_names.SequenceEqual(component_bom.instance_names);
+						compare[1] = Convert.ToInt32(component_edif.instance_names.SequenceEqual(component_bom.instance_names));
 
-						if (compare.Contains(false))
+						if (compare.Contains(-1) || compare.Contains(0))
 							Console.WriteLine(component_edif.name);
 
 						build_error_list(compare, component_edif, component_bom);
@@ -197,16 +197,16 @@ namespace BOM_Checker
 			}//if temperatuer of component doesnt match
 		} //if there is a false then adds to error_list and fills the data.
 
-		private void build_error_list(bool[] compare, component edif, component bom) //overload for bom 
+		private void build_error_list(int[] compare, component edif, component bom) //overload for bom 
 		{
-			if (!compare[0])
+			if (compare[0] != 1)
 			{
 				part_mismatch instances = new part_mismatch("instance mismatch");
 				instances.edif_instances = edif.instances.ToString();
 				instances.mrp_instances = bom.instances.ToString();
 				assign_error_name(edif, instances);
 			}//if instances of component doesn't match
-			if (!compare[1])
+			if (compare[1] != 1)
 			{
 				part_mismatch instance_names = new part_mismatch("instance_names mismatch");
 				instance_names.edif_instance_names = edif.instance_names;
@@ -218,11 +218,11 @@ namespace BOM_Checker
 
 		private string generate_error(int input)
 		{
-			if (input == 0)
+			if (input == -1)
 				return "missing";
 			if (input == 1)
 				return "correct";
-			if (input == -1)
+			if (input == 0)
 				return "mismatch";
 
 			return "error";
@@ -238,18 +238,15 @@ namespace BOM_Checker
 		private int compare_values(float edif, float dbf)
 		{
 			if (edif == -1 || dbf == -1)
-				return 0; // data missing, make sure to flag
+				return -1; // data missing, make sure to flag
 
 			if (edif == -2)
 				return 1; //dont check, it is not supposed to be 
 
 			if (edif == -3 || dbf == -3)
-				return -1; //invalid data, make sure to flag
+				return 0; //invalid data, make sure to flag
 
-			if (edif == dbf)
-				return 1; //true
-			else
-				return -1; //false
+			return (Convert.ToInt32(edif == dbf)); //otherwise normal 0 and 1
 		}
 
 		private int compare_values(string edif, string dbf)
