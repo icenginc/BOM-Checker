@@ -2,14 +2,18 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Text.RegularExpressions;
+
 class component
 {
+	public char type;
 	public string name;
 	public string partno;
 	public string footprint;
 	public string value; //wattage or voltage
 	public string comment; //value
 	public string package;
+	public string modelno;
 	public string temp; //rating in mrp
 	public int instances = 1;
 	public List<string> instance_names = new List<string>();
@@ -24,20 +28,38 @@ class component
 	public component(string text)
 	{
 		raw_text = text;
+		replace_text();
+
+		assign_name();
+		assign_partno();
+		assign_type();
+		assign_footprint();
+		assign_package();
+		assign_temp();
+		assign_members(); //do value and comment for some, modelno for some
 	}
 
 	public component() { } //empty constructor
 
-	public void assign_members()
+	private void replace_text()
 	{
-		assign_name();
-		assign_partno();
-		assign_footprint();
-		assign_value();
-		assign_comment();
-		assign_package();
-		assign_temp();
+		raw_text = Regex.Replace(raw_text, "voltage", "voltage", RegexOptions.IgnoreCase);
+		raw_text = Regex.Replace(raw_text, "wattage", "wattage", RegexOptions.IgnoreCase);
+		raw_text = Regex.Replace(raw_text, "package", "package", RegexOptions.IgnoreCase);
 	}
+
+	private void assign_members() //res, cap, fuse
+	{
+		if (type == 'R' || type == 'C' || type == 'F')
+		{
+			assign_value();
+			assign_comment();
+		}
+		if (type == 'I' || type == 'S' || type == 'T')
+		{
+			assign_modelno();
+		}
+	} 
 
 	public void assign_members_bom()
 	{	
@@ -45,6 +67,35 @@ class component
 		assign_instances(row["qty"].ToString());
 		assign_instance_names(row["refdesmemo"].ToString());
 	}
+
+	private void assign_type()
+	{
+		int index = raw_text.IndexOf("PARTNO") + 16; //skips the PACKAGE (String "
+		int quote_index = raw_text.IndexOf('\"', index);
+		string partno = raw_text.Substring(index, quote_index - index);
+
+		if (partno.Length == 8) //found a partno
+		{
+			partno = partno.Substring(0, 3); //get prefix
+			if (partno[0] == '2')
+				type = 'I';
+			else if (partno[0] == '3')
+				type = 'C';
+			else if (partno[0] == '4')
+				type = 'R';
+			else if (partno[0] == '5')
+				type = 'F';
+			else if (partno[0] == '6')
+				if (partno[1] == '1')
+					type = 'S';
+				else if (partno[1] == '3')
+					type = 'T';
+				else
+					type = '\0';
+		}
+		else
+			type = '\0';
+	}//use partnum to do type
 
 	private void assign_instance_names(string input)
 	{
@@ -100,6 +151,9 @@ class component
 		else
 			quote_index = offset - 1;
 		package = raw_text.Substring(index, quote_index - index);
+
+		if (package == "SM")
+			;
 	}
 
 	private void assign_comment()
@@ -162,5 +216,10 @@ class component
 		else
 			quote_index = offset - 1;
 		partno = raw_text.Substring(index, quote_index - index);
+	}
+
+	private void assign_modelno()
+	{
+
 	}
 }

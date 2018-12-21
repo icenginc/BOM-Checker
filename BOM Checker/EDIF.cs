@@ -58,14 +58,22 @@ namespace BOM_Checker
 							raw_text += line;
 					}
 
-					var instance = return_object
-						(raw_text);
+					if (!raw_text.Contains("DNI")) //dont save if its DNI
+					{
+						component addition = new component(raw_text);
+						if(addition.type != '\0')
+							components.Add(addition); //this auto populates the members in the constructor, while adding it to the list
+					}
+					/*
+					var instance = return_object(raw_text);
 
 					if (instance is component)
 					{
 						components = add_component(components, (component)instance); //if reistor or capacitor
 					}
-					
+					*/ //this is if we want to differentiate component objects, decided to use the same
+
+
 				} //save next 25 lines if so, then save the object
 			}
 			return components;
@@ -97,6 +105,16 @@ namespace BOM_Checker
 
 		}
 
+		/*
+		private List<component> add_component(List<component> components, component instance)
+		{
+			if (!instance.raw_text.Contains("DNI")) //dont save if its a DNI
+				components.Add(instance);
+
+			return components;
+		} //take the component list, modify isntance, add to component list, return
+
+		
 		private Object return_object(string raw_text)
 		{
 			int index = raw_text.IndexOf("PARTNO") + 16; //skips the PACKAGE (String "
@@ -116,20 +134,9 @@ namespace BOM_Checker
 				return -1; //not found
 		}
 
-		private List<component> add_component(List<component> components, component instance)
-		{
-			instance.raw_text = Regex.Replace(instance.raw_text, "voltage", "voltage", RegexOptions.IgnoreCase);
-			instance.raw_text = Regex.Replace(instance.raw_text, "wattage", "wattage", RegexOptions.IgnoreCase);
-			instance.raw_text = Regex.Replace(instance.raw_text, "package", "package", RegexOptions.IgnoreCase);
+		
 
-			instance.assign_members(); //put everything in
-
-			if (!instance.raw_text.Contains("DNI")) //dont save if its a DNI
-				components.Add(instance);
-
-			return components;
-		} //take the component list, modify isntance, add to component list, return
-
+		
 		private List<component> assign_members(List<component> consolidated_list)
 		{
 			foreach (component current in consolidated_list)
@@ -137,5 +144,6 @@ namespace BOM_Checker
 
 			return consolidated_list;
 		}
+		*/ //part of implementation where external check of partnum -> moved into component object
 	}
 }
