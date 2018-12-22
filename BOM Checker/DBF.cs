@@ -27,7 +27,8 @@ namespace BOM_Checker
 
 			if (connection.State == ConnectionState.Open)
 			{
-				string mySQL = "SELECT `partno`, `aux1`, `aux2`, `footprint`, `value`, `packtype`, `rating` FROM PARTMAST WHERE `partno` IN (" + part_list + ")";  // dbf table + columns
+				string mySQL = "SELECT `partno`, `aux1`, `aux2`, `footprint`, `value`, `packtype`, `rating`, `modelno` FROM PARTMAST WHERE `partno` IN (" + part_list + ")";  // dbf table + columns
+				//string mySQL = "SELECT * FROM PARTMAST WHERE `partno` IN (" + part_list + ")";  // dbf table + columns
 				OleDbCommand MyQuery = new OleDbCommand(mySQL, connection);
 				OleDbDataAdapter DA = new OleDbDataAdapter(MyQuery);
 

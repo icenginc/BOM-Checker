@@ -70,7 +70,7 @@ namespace BOM_Checker
 						component_edif.instance_names.Sort();
 
 						compare[1] = Convert.ToInt32(component_edif.instance_names.SequenceEqual(component_bom.instance_names));
-
+						
 						if (compare.Contains(-1) || compare.Contains(0))
 							Console.WriteLine(component_edif.name);
 
@@ -87,7 +87,7 @@ namespace BOM_Checker
 		{
 			foreach (component component in edif_list)
 			{
-				int[] compare = new int[5];
+				int[] compare = new int[6];
 				string partno = component.partno.ToUpper();
 				DataRow datarow = partmast_data.NewRow(); //placeholder row to use conditional below
 				if (partno != "")
@@ -111,6 +111,7 @@ namespace BOM_Checker
 				compare[2] = compare_values(unit_parse(component.comment), unit_parse(datarow[4].ToString())); //value mrp and comment edif
 				compare[3] = compare_values(unit_parse(component.package), unit_parse(datarow[5].ToString())); //packtype mrp and package edif
 				compare[4] = compare_values(unit_parse(component.temp), unit_parse(datarow[6].ToString())); //rating mrp and temperature edif
+				compare[5] = compare_values(component.modelno, datarow[7].ToString()); //modelno mrp and modelno edif
 
 				if (compare.Contains(-1) || compare.Contains(0))
 					Console.WriteLine(component.name);
@@ -119,102 +120,35 @@ namespace BOM_Checker
 			}
 		} //compare partmast values with edif values of components
 
+
 		private void build_error_list(int[] compare, component edif, DataRow partmast) //overload for pcmrp
 		{
-			if (compare[0] != 1)
+			string[] errors = new string[6] { "Aux ", "Footprint ", "Value ", "Package ", "Temperature ", "ModelNo "};
+
+			for (int i = 0; i < compare.Length; i++)
 			{
-				string error = "Aux " + generate_error(compare[0]);
-				/*
-				string error = "Aux mismatch";
-				if (unit_parse(edif.value) == -1 || ((edif.type == 'C' || edif.type == 'F') && unit_parse(partmast[1].ToString()) == -1)
-					|| (unit_parse(partmast[2].ToString()) == -1) && (edif.type == 'R')) //has to differentiate between W or V.
-					error = "Aux missing";
-					*/
-				part_mismatch auxs = new part_mismatch(error);
-
-				auxs.edif_aux = edif.value;
-				if (edif.type == 'C' || edif.type == 'F')
-					auxs.mrp_aux = new String(partmast[1].ToString().Where(ch => !char.IsWhiteSpace(ch)).ToArray());
-				else if (edif.type == 'R')
-					auxs.mrp_aux = new String(partmast[2].ToString().Where(ch => !char.IsWhiteSpace(ch)).ToArray());
-
-				assign_error_name(edif, auxs);
-			}//if aux(V or W) rating of component doesn't match (wattage or voltage)
-			if (compare[1] != 1)
-			{
-				string error = "Footprint " + generate_error(compare[1]);
-/*
-				string error = "Footprint mismatch";
-				if (unit_parse(edif.footprint) == -1 || unit_parse(partmast[3].ToString()) == -1)
-					error = "Footprint missing";
-					*/
-				part_mismatch footprints = new part_mismatch(error);
-
-				footprints.edif_footprint = edif.footprint;
-				footprints.mrp_footprint = new String(partmast[3].ToString().Where(ch => !char.IsWhiteSpace(ch)).ToArray());
-				assign_error_name(edif, footprints);
-			}//if footprint doesn't match
-			if (compare[2] != 1)
-			{
-				string error = "Value " + generate_error(compare[2]);
-				/*
-				string error = "Value mismatch";
-				if (unit_parse(edif.value) == -1 || unit_parse(partmast[4].ToString()) == -1)
-					error = "Value missing";
-					*/
-				part_mismatch values = new part_mismatch(error);
-
-				values.edif_value = edif.value;
-				values.mrp_value = new String(partmast[4].ToString().Where(ch => !char.IsWhiteSpace(ch)).ToArray());
-				assign_error_name(edif, values);
-			}// if value of component don't match
-			if (compare[3] != 1)
-			{
-				string error = "Package " + generate_error(compare[3]);
-				/*
-				string error = "Package mismatch";
-				if (unit_parse(edif.package) == -1 || unit_parse(partmast[5].ToString()) == -1)
-					error = "Package missing";
-					*/
-				part_mismatch packages = new part_mismatch(error);
-
-				packages.edif_package = edif.package;
-				packages.mrp_package = new String(partmast[5].ToString().Where(ch => !char.IsWhiteSpace(ch)).ToArray());
-				assign_error_name(edif, packages);
-			}// if package of component doesnt match
-			if (compare[4] != 1)
-			{
-				string error = "Temperature " + generate_error(compare[4]);
-				/*
-				string error = "Temperature mismatch";
-				if (unit_parse(edif.temp) == -1 || unit_parse(partmast[6].ToString()) == -1)
-					error = "Temperature missing";
-					*/
-				part_mismatch temperatures = new part_mismatch(error);
-
-				temperatures.edif_temp = edif.temp;
-				temperatures.mrp_temp = new String(partmast[6].ToString().Where(ch => !char.IsWhiteSpace(ch)).ToArray());
-				assign_error_name(edif, temperatures);
-			}//if temperatuer of component doesnt match
+				if (compare[i] != 1)
+				{
+					string error = errors[i] + generate_error(compare[i]);
+					part_mismatch mismatch = new part_mismatch(compare, edif, partmast, error);
+					error_list.Add(mismatch);
+				} //if its wrong
+			} //go through compare list
 		} //if there is a false then adds to error_list and fills the data.
 
 		private void build_error_list(int[] compare, component edif, component bom) //overload for bom 
 		{
-			if (compare[0] != 1)
-			{
-				part_mismatch instances = new part_mismatch("Instance mismatch");
-				instances.edif_instances = edif.instances.ToString();
-				instances.mrp_instances = bom.instances.ToString();
-				assign_error_name(edif, instances);
-			}//if instances of component doesn't match
-			if (compare[1] != 1)
-			{
-				part_mismatch instance_names = new part_mismatch("Instance Names mismatch");
-				instance_names.edif_instance_names = edif.instance_names;
-				instance_names.mrp_instance_names = bom.instance_names;
-				assign_error_name(edif, instance_names);
-			}//if instance names doesn't match
+			string[] errors = new string[2] { "Instance ", "Instance Names "};
 
+			for (int i = 0; i < compare.Length; i++)
+			{
+				if (compare[i] != 1)
+				{
+					string error = errors[i] + generate_error(compare[i]);
+					part_mismatch mismatch = new part_mismatch(compare, edif, bom, error);
+					error_list.Add(mismatch);
+				} //if its wrong
+			} //go through compare list
 		}//if there is a false then adds to error_list and fills the data.
 
 		private string generate_error(int input)
@@ -228,13 +162,6 @@ namespace BOM_Checker
 
 			return "error";
 		}
-
-		private void assign_error_name(component component, part_mismatch mismatch)
-		{
-			mismatch.name = component.name;
-			mismatch.partno = component.partno;
-			error_list.Add(mismatch);
-		} //(generic assignments put into this funct, error specific ones left in build_error_list)
 
 		private int compare_values(float edif, float dbf)
 		{
@@ -252,6 +179,9 @@ namespace BOM_Checker
 
 		private int compare_values(string edif, string dbf)
 		{
+			if (edif == null || dbf == null)
+				return 1; //means not supposed to be assigned, skip
+
 			edif = new String(edif.Where(ch => !char.IsWhiteSpace(ch)).ToArray()).ToLower();
 			dbf = new String(dbf.Where(ch => !char.IsWhiteSpace(ch)).ToArray()).ToLower();
 			//remove whitespace and make lowercase
@@ -312,5 +242,151 @@ namespace BOM_Checker
 			}
 			return value;
 		}
+
+		public static string remove_whitespace(string input)
+		{
+			return new String(input.Where(ch => !char.IsWhiteSpace(ch)).ToArray());
+		}
 	}
 }
+/*
+		private part_mismatch assign_error_members(int i, DataRow partmast, component edif, part_mismatch mismatch)
+		{
+			switch (i)
+			{
+				case 0:
+					mismatch.edif_aux = edif.value;
+					if (edif.type == 'C' || edif.type == 'F')
+						mismatch.mrp_aux = remove_whitespace(partmast[1].ToString());
+					else if (edif.type == 'R')
+						mismatch.mrp_aux = remove_whitespace(partmast[2].ToString());
+					break;
+				case 1:
+					mismatch.edif_footprint = edif.footprint;
+					mismatch.mrp_footprint = remove_whitespace(partmast[3].ToString());
+					break;
+				case 2:
+					mismatch.edif_value = edif.value;
+					mismatch.mrp_value = remove_whitespace(partmast[4].ToString());
+					break;
+				case 3:
+					mismatch.edif_package = edif.package;
+					mismatch.mrp_package = remove_whitespace(partmast[5].ToString());
+					break;
+				case 4:
+					mismatch.edif_temp = edif.temp;
+					mismatch.mrp_temp = remove_whitespace(partmast[6].ToString());
+					break;
+				case 5:
+					mismatch.edif_modelno = edif.modelno;
+					mismatch.mrp_modelno = remove_whitespace(partmast[7].ToString());
+					break;
+			}
+			mismatch.name = edif.name;
+			mismatch.partno = edif.partno;
+
+			return mismatch;
+		} //(generic assignments put into this funct, error specific ones left in build_error_list)
+		*/
+
+/*
+	private part_mismatch assign_error_members(int i, component bom, component edif, part_mismatch mismatch)
+	{
+		switch (i)
+		{
+			case 0:
+				mismatch.edif_instances = edif.instances.ToString();
+				mismatch.mrp_instances = bom.instances.ToString();
+				break;
+			case 1:
+				mismatch.edif_instance_names = edif.instance_names;
+				mismatch.mrp_instance_names = bom.instance_names;
+				break;
+		}
+		mismatch.name = edif.name;
+		mismatch.partno = edif.partno;
+
+		return mismatch;
+	}
+	*/
+
+/*
+			if (compare[0] != 1)
+			{
+				string error = "Aux " + generate_error(compare[0]);
+				part_mismatch auxs = new part_mismatch(error);
+
+				auxs.edif_aux = edif.value;
+				if (edif.type == 'C' || edif.type == 'F')
+					auxs.mrp_aux = new String(partmast[1].ToString().Where(ch => !char.IsWhiteSpace(ch)).ToArray());
+				else if (edif.type == 'R')
+					auxs.mrp_aux = new String(partmast[2].ToString().Where(ch => !char.IsWhiteSpace(ch)).ToArray());
+
+				assign_error_name(edif, auxs);
+			}//if aux(V or W) rating of component doesn't match (wattage or voltage)
+			if (compare[1] != 1)
+			{
+				string error = "Footprint " + generate_error(compare[1]);
+				part_mismatch footprints = new part_mismatch(error);
+
+				footprints.edif_footprint = edif.footprint;
+				footprints.mrp_footprint = new String(partmast[3].ToString().Where(ch => !char.IsWhiteSpace(ch)).ToArray());
+				assign_error_name(edif, footprints);
+			}//if footprint doesn't match
+			if (compare[2] != 1)
+			{
+				string error = "Value " + generate_error(compare[2]);
+				part_mismatch values = new part_mismatch(error);
+
+				values.edif_value = edif.value;
+				values.mrp_value = new String(partmast[4].ToString().Where(ch => !char.IsWhiteSpace(ch)).ToArray());
+				assign_error_name(edif, values);
+			}// if value of component don't match
+			if (compare[3] != 1)
+			{
+				string error = "Package " + generate_error(compare[3]);
+				part_mismatch packages = new part_mismatch(error);
+
+				packages.edif_package = edif.package;
+				packages.mrp_package = new String(partmast[5].ToString().Where(ch => !char.IsWhiteSpace(ch)).ToArray());
+				assign_error_name(edif, packages);
+			}// if package of component doesnt match
+			if (compare[4] != 1)
+			{
+				string error = "Temperature " + generate_error(compare[4]);
+				part_mismatch temperatures = new part_mismatch(error);
+
+				temperatures.edif_temp = edif.temp;
+				temperatures.mrp_temp = new String(partmast[6].ToString().Where(ch => !char.IsWhiteSpace(ch)).ToArray());
+				assign_error_name(edif, temperatures);
+			}//if temperatuer of component doesnt match
+			if (compare[5] != 1)
+			{
+				string error = "ModelNo " + generate_error(compare[4]);
+				part_mismatch modelno = new part_mismatch(error);
+
+				modelno.edif_temp = edif.temp;
+				modelno.mrp_temp = new String(partmast[6].ToString().Where(ch => !char.IsWhiteSpace(ch)).ToArray());
+				assign_error_name(edif, modelno);
+			}
+			*/ //old way, explicit instead of looping
+
+
+
+
+/*
+if (compare[0] != 1)
+{
+	part_mismatch instances = new part_mismatch("Instance mismatch");
+	instances.edif_instances = edif.instances.ToString();
+	instances.mrp_instances = bom.instances.ToString();
+	assign_error_name(edif, instances);
+}//if instances of component doesn't match
+if (compare[1] != 1)
+{
+	part_mismatch instance_names = new part_mismatch("Instance Names mismatch");
+	instance_names.edif_instance_names = edif.instance_names;
+	instance_names.mrp_instance_names = bom.instance_names;
+	assign_error_name(edif, instance_names);
+}//if instance names doesn't match
+*/ //rewrite this in general loop fashion
