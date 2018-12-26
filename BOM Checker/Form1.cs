@@ -24,12 +24,13 @@ namespace BOM_Checker
 		List<component> edif_list, bom_component_list = new List<component>();
 		DataTable partmast_data, bom_data = new DataTable();
 		List<part_mismatch> error_list = new List<part_mismatch>(); //to store errors in
+		List<CheckBox> checks = new List<CheckBox>();
 		bool stop = false;
 
 		public Form1()
 		{
 			InitializeComponent();
-
+			checks.AddRange(new CheckBox[] { checkBox_aux, checkBox_footprint, checkBox_value, checkBox_package, checkBox_temp, checkBox_instances }); 
 			textBox_status.Text += "Loaded BOM Checker Software - " + DateTime.Now.ToLongDateString() + Environment.NewLine;
 			textBox_status.Select(textBox_status.Text.Length, 0);
 		}

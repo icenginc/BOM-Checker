@@ -7,6 +7,7 @@ namespace BOM_Checker
 {
 	class part_mismatch
 	{
+		private string type;
 		public string partno;
 		public string mrp_value, edif_value; //also called 'comment' in altium
 		public string mrp_package, edif_package;
@@ -27,6 +28,7 @@ namespace BOM_Checker
 		public part_mismatch(string error_msg)
 		{
 			error = error_msg;
+			assign_type();
 		}
 
 		public part_mismatch(int[] array, component component, DataRow row, string error_msg)
@@ -49,6 +51,7 @@ namespace BOM_Checker
 
 		public void assign_members()
 		{
+			assign_type();
 			if(compare[0] != 1)
 				assign_aux();
 			if(compare[1] != 1)
@@ -68,6 +71,7 @@ namespace BOM_Checker
 
 		private void assign_members_bom()
 		{
+			assign_type();
 			if (compare[0] != 1)
 				assign_instance();
 			if (compare[1] != 1)
@@ -75,6 +79,16 @@ namespace BOM_Checker
 
 			name = edif.name;
 			partno = edif.partno;
+		}
+
+		private void assign_type()
+		{
+			var split = error.Split(' ');
+			if (split.Count() == 2)
+				type = split[0];
+			else if
+				(split.Count() == 3)
+				type = "Instance Names"; //only type that contains a space
 		}
 
 		private void assign_aux()
@@ -118,29 +132,32 @@ namespace BOM_Checker
 
 		private void assign_instance()
 		{
-
+			edif_instances = edif.instances.ToString();
+			mrp_instances = bom.instances.ToString();
 		}
 
 		private void assign_instance_names()
 		{
-
+			edif_instance_names = edif.instance_names;
+			mrp_instance_names = bom.instance_names;
 		}
 
 		public string string_mismatch()
 		{
 			string msg = string.Empty;
+			string[] errors = new string[8] { "Aux", "Footprint", "Value", "Package", "Temperature", "ModelNo", "Instance", "Instance Names" };
 
-			if (mrp_value != null && edif_value != null)
+			if (type == errors[2])
 				msg = "MRP:" + mrp_value + " | " + "EDIF:" + edif_value;
-			else if (mrp_package != null && edif_package != null)
+			else if (type == errors[3])
 				msg = "MRP:" + mrp_package + " | " + "EDIF:" + edif_package;
-			else if (mrp_footprint != null && edif_footprint != null)
+			else if (type == errors[1])
 				msg = "MRP:" + mrp_footprint + " | " + "EDIF:" + edif_footprint;
-			else if (mrp_aux != null && edif_aux != null)
+			else if (type == errors[0])
 				msg = "MRP:" + mrp_aux + " | " + "EDIF:" + edif_aux;
-			else if (mrp_instances != null && edif_instances != null)
+			else if (type == errors[6])
 				msg = "MRP:" + mrp_instances + " | " + "EDIF:" + edif_instances;
-			else if (mrp_instance_names.Count != 0 && edif_instance_names.Count != 0)
+			else if (type == errors[7])
 			{
 				string mrp_names = "", edif_names = "";
 
@@ -151,8 +168,10 @@ namespace BOM_Checker
 
 				msg = "MRP:" + mrp_names + " | " + "EDIF:" + edif_names;
 			}
-			else if (mrp_temp != null && edif_temp != null)
+			else if (type == errors[4])
 				msg = "MRP:" + mrp_temp + " | " + "EDIF:" + edif_temp;
+			else if (type == errors[5])
+				msg = "MRP:" + mrp_modelno + " | " + "EDIF:" + edif_modelno;
 
 			return msg;
 		} //return based on what is populated

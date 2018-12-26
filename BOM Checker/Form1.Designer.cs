@@ -45,7 +45,7 @@
 			this.button_customer_excel = new System.Windows.Forms.Button();
 			this.textBox1 = new System.Windows.Forms.TextBox();
 			this.textBox2 = new System.Windows.Forms.TextBox();
-			this.button3 = new System.Windows.Forms.Button();
+			this.button_compare2 = new System.Windows.Forms.Button();
 			this.button4 = new System.Windows.Forms.Button();
 			this.label5 = new System.Windows.Forms.Label();
 			this.button5 = new System.Windows.Forms.Button();
@@ -58,10 +58,19 @@
 			this.button_clear = new System.Windows.Forms.Button();
 			this.label8 = new System.Windows.Forms.Label();
 			this.label9 = new System.Windows.Forms.Label();
+			this.groupBox1 = new System.Windows.Forms.GroupBox();
+			this.checkBox_instances = new System.Windows.Forms.CheckBox();
+			this.checkBox_model = new System.Windows.Forms.CheckBox();
+			this.checkBox_temp = new System.Windows.Forms.CheckBox();
+			this.checkBox_package = new System.Windows.Forms.CheckBox();
+			this.checkBox_value = new System.Windows.Forms.CheckBox();
+			this.checkBox_footprint = new System.Windows.Forms.CheckBox();
+			this.checkBox_aux = new System.Windows.Forms.CheckBox();
 			this.panel1.SuspendLayout();
 			this.panel2.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
 			this.panel3.SuspendLayout();
+			this.groupBox1.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// label3
@@ -76,7 +85,7 @@
 			// 
 			// button_parse
 			// 
-			this.button_parse.Location = new System.Drawing.Point(386, 0);
+			this.button_parse.Location = new System.Drawing.Point(232, 3);
 			this.button_parse.Name = "button_parse";
 			this.button_parse.Size = new System.Drawing.Size(69, 21);
 			this.button_parse.TabIndex = 14;
@@ -88,7 +97,7 @@
 			// 
 			// button_db
 			// 
-			this.button_db.Location = new System.Drawing.Point(454, 0);
+			this.button_db.Location = new System.Drawing.Point(300, 3);
 			this.button_db.Name = "button_db";
 			this.button_db.Size = new System.Drawing.Size(62, 21);
 			this.button_db.TabIndex = 15;
@@ -197,7 +206,7 @@
 			this.panel2.Controls.Add(this.button_customer_excel);
 			this.panel2.Controls.Add(this.textBox1);
 			this.panel2.Controls.Add(this.textBox2);
-			this.panel2.Controls.Add(this.button3);
+			this.panel2.Controls.Add(this.button_compare2);
 			this.panel2.Controls.Add(this.button4);
 			this.panel2.Controls.Add(this.label5);
 			this.panel2.Controls.Add(this.button5);
@@ -241,19 +250,19 @@
 			this.textBox2.Size = new System.Drawing.Size(215, 20);
 			this.textBox2.TabIndex = 14;
 			// 
-			// button3
+			// button_compare2
 			// 
-			this.button3.Location = new System.Drawing.Point(394, 29);
-			this.button3.Name = "button3";
-			this.button3.Size = new System.Drawing.Size(115, 39);
-			this.button3.TabIndex = 16;
-			this.button3.Text = "Compare Excel/EDIF";
-			this.button3.UseMnemonic = false;
-			this.button3.UseVisualStyleBackColor = true;
+			this.button_compare2.Location = new System.Drawing.Point(394, 30);
+			this.button_compare2.Name = "button_compare2";
+			this.button_compare2.Size = new System.Drawing.Size(115, 38);
+			this.button_compare2.TabIndex = 16;
+			this.button_compare2.Text = "Compare Excel/EDIF";
+			this.button_compare2.UseMnemonic = false;
+			this.button_compare2.UseVisualStyleBackColor = true;
 			// 
 			// button4
 			// 
-			this.button4.Location = new System.Drawing.Point(454, 0);
+			this.button4.Location = new System.Drawing.Point(300, 1);
 			this.button4.Name = "button4";
 			this.button4.Size = new System.Drawing.Size(62, 21);
 			this.button4.TabIndex = 15;
@@ -273,7 +282,7 @@
 			// 
 			// button5
 			// 
-			this.button5.Location = new System.Drawing.Point(386, 0);
+			this.button5.Location = new System.Drawing.Point(232, 1);
 			this.button5.Name = "button5";
 			this.button5.Size = new System.Drawing.Size(69, 21);
 			this.button5.TabIndex = 14;
@@ -304,9 +313,9 @@
 			// button_excel
 			// 
 			this.button_excel.Enabled = false;
-			this.button_excel.Location = new System.Drawing.Point(12, 9);
+			this.button_excel.Location = new System.Drawing.Point(12, 7);
 			this.button_excel.Name = "button_excel";
-			this.button_excel.Size = new System.Drawing.Size(115, 39);
+			this.button_excel.Size = new System.Drawing.Size(115, 32);
 			this.button_excel.TabIndex = 21;
 			this.button_excel.Text = "Export to Excel";
 			this.button_excel.UseMnemonic = false;
@@ -337,9 +346,9 @@
 			// 
 			// button_output
 			// 
-			this.button_output.Location = new System.Drawing.Point(12, 51);
+			this.button_output.Location = new System.Drawing.Point(12, 41);
 			this.button_output.Name = "button_output";
-			this.button_output.Size = new System.Drawing.Size(115, 21);
+			this.button_output.Size = new System.Drawing.Size(115, 32);
 			this.button_output.TabIndex = 23;
 			this.button_output.Text = "Expand Output";
 			this.button_output.UseMnemonic = false;
@@ -377,11 +386,120 @@
 			this.label9.TabIndex = 25;
 			this.label9.Text = "Customer Excel to Schematic(EDIF) Checker:";
 			// 
+			// groupBox1
+			// 
+			this.groupBox1.Controls.Add(this.checkBox_instances);
+			this.groupBox1.Controls.Add(this.checkBox_model);
+			this.groupBox1.Controls.Add(this.checkBox_temp);
+			this.groupBox1.Controls.Add(this.checkBox_package);
+			this.groupBox1.Controls.Add(this.checkBox_value);
+			this.groupBox1.Controls.Add(this.checkBox_footprint);
+			this.groupBox1.Controls.Add(this.checkBox_aux);
+			this.groupBox1.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+			this.groupBox1.Location = new System.Drawing.Point(246, 9);
+			this.groupBox1.Name = "groupBox1";
+			this.groupBox1.Size = new System.Drawing.Size(300, 57);
+			this.groupBox1.TabIndex = 26;
+			this.groupBox1.TabStop = false;
+			this.groupBox1.Text = "Comparison Parameters";
+			// 
+			// checkBox_instances
+			// 
+			this.checkBox_instances.AutoSize = true;
+			this.checkBox_instances.CheckAlign = System.Drawing.ContentAlignment.TopCenter;
+			this.checkBox_instances.Checked = true;
+			this.checkBox_instances.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.checkBox_instances.Location = new System.Drawing.Point(243, 20);
+			this.checkBox_instances.Name = "checkBox_instances";
+			this.checkBox_instances.Size = new System.Drawing.Size(52, 31);
+			this.checkBox_instances.TabIndex = 6;
+			this.checkBox_instances.Text = "Instance";
+			this.checkBox_instances.UseVisualStyleBackColor = true;
+			// 
+			// checkBox_model
+			// 
+			this.checkBox_model.AutoSize = true;
+			this.checkBox_model.CheckAlign = System.Drawing.ContentAlignment.TopCenter;
+			this.checkBox_model.Checked = true;
+			this.checkBox_model.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.checkBox_model.Location = new System.Drawing.Point(208, 20);
+			this.checkBox_model.Name = "checkBox_model";
+			this.checkBox_model.Size = new System.Drawing.Size(40, 31);
+			this.checkBox_model.TabIndex = 5;
+			this.checkBox_model.Text = "Model";
+			this.checkBox_model.UseVisualStyleBackColor = true;
+			// 
+			// checkBox_temp
+			// 
+			this.checkBox_temp.AutoSize = true;
+			this.checkBox_temp.CheckAlign = System.Drawing.ContentAlignment.TopCenter;
+			this.checkBox_temp.Checked = true;
+			this.checkBox_temp.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.checkBox_temp.Location = new System.Drawing.Point(166, 20);
+			this.checkBox_temp.Name = "checkBox_temp";
+			this.checkBox_temp.Size = new System.Drawing.Size(41, 31);
+			this.checkBox_temp.TabIndex = 4;
+			this.checkBox_temp.Text = "Temp ";
+			this.checkBox_temp.UseVisualStyleBackColor = true;
+			// 
+			// checkBox_package
+			// 
+			this.checkBox_package.AutoSize = true;
+			this.checkBox_package.CheckAlign = System.Drawing.ContentAlignment.TopCenter;
+			this.checkBox_package.Checked = true;
+			this.checkBox_package.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.checkBox_package.Location = new System.Drawing.Point(117, 20);
+			this.checkBox_package.Name = "checkBox_package";
+			this.checkBox_package.Size = new System.Drawing.Size(54, 31);
+			this.checkBox_package.TabIndex = 3;
+			this.checkBox_package.Text = "Package";
+			this.checkBox_package.UseVisualStyleBackColor = true;
+			// 
+			// checkBox_value
+			// 
+			this.checkBox_value.AutoSize = true;
+			this.checkBox_value.CheckAlign = System.Drawing.ContentAlignment.TopCenter;
+			this.checkBox_value.Checked = true;
+			this.checkBox_value.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.checkBox_value.Location = new System.Drawing.Point(83, 20);
+			this.checkBox_value.Name = "checkBox_value";
+			this.checkBox_value.Size = new System.Drawing.Size(38, 31);
+			this.checkBox_value.TabIndex = 2;
+			this.checkBox_value.Text = "Value";
+			this.checkBox_value.UseVisualStyleBackColor = true;
+			// 
+			// checkBox_footprint
+			// 
+			this.checkBox_footprint.AutoSize = true;
+			this.checkBox_footprint.CheckAlign = System.Drawing.ContentAlignment.TopCenter;
+			this.checkBox_footprint.Checked = true;
+			this.checkBox_footprint.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.checkBox_footprint.Location = new System.Drawing.Point(35, 20);
+			this.checkBox_footprint.Name = "checkBox_footprint";
+			this.checkBox_footprint.Size = new System.Drawing.Size(52, 31);
+			this.checkBox_footprint.TabIndex = 1;
+			this.checkBox_footprint.Text = "Footprint";
+			this.checkBox_footprint.UseVisualStyleBackColor = true;
+			// 
+			// checkBox_aux
+			// 
+			this.checkBox_aux.AutoSize = true;
+			this.checkBox_aux.CheckAlign = System.Drawing.ContentAlignment.TopCenter;
+			this.checkBox_aux.Checked = true;
+			this.checkBox_aux.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.checkBox_aux.Location = new System.Drawing.Point(7, 20);
+			this.checkBox_aux.Name = "checkBox_aux";
+			this.checkBox_aux.Size = new System.Drawing.Size(29, 31);
+			this.checkBox_aux.TabIndex = 0;
+			this.checkBox_aux.Text = "Aux";
+			this.checkBox_aux.UseVisualStyleBackColor = true;
+			// 
 			// Form1
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(562, 409);
+			this.Controls.Add(this.groupBox1);
 			this.Controls.Add(this.label9);
 			this.Controls.Add(this.label8);
 			this.Controls.Add(this.panel3);
@@ -398,6 +516,8 @@
 			this.panel2.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
 			this.panel3.ResumeLayout(false);
+			this.groupBox1.ResumeLayout(false);
+			this.groupBox1.PerformLayout();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -422,7 +542,7 @@
 		private System.Windows.Forms.Button button_customer_excel;
 		private System.Windows.Forms.TextBox textBox1;
 		private System.Windows.Forms.TextBox textBox2;
-		private System.Windows.Forms.Button button3;
+		private System.Windows.Forms.Button button_compare2;
 		private System.Windows.Forms.Button button4;
 		private System.Windows.Forms.Label label5;
 		private System.Windows.Forms.Button button5;
@@ -435,6 +555,14 @@
 		private System.Windows.Forms.Label label9;
 		private System.Windows.Forms.Button button_clear;
 		private System.Windows.Forms.Button button_output;
+		private System.Windows.Forms.GroupBox groupBox1;
+		private System.Windows.Forms.CheckBox checkBox_aux;
+		private System.Windows.Forms.CheckBox checkBox_footprint;
+		private System.Windows.Forms.CheckBox checkBox_instances;
+		private System.Windows.Forms.CheckBox checkBox_model;
+		private System.Windows.Forms.CheckBox checkBox_temp;
+		private System.Windows.Forms.CheckBox checkBox_package;
+		private System.Windows.Forms.CheckBox checkBox_value;
 	}
 }
 

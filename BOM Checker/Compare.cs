@@ -180,19 +180,19 @@ namespace BOM_Checker
 		private int compare_values(string edif, string dbf)
 		{
 			if (edif == null || dbf == null)
-				return 1; //means not supposed to be assigned, skip
+				return -1; //missing
 
 			edif = new String(edif.Where(ch => !char.IsWhiteSpace(ch)).ToArray()).ToLower();
 			dbf = new String(dbf.Where(ch => !char.IsWhiteSpace(ch)).ToArray()).ToLower();
 			//remove whitespace and make lowercase
 
 			if (edif == "" || dbf == "")
-				return 0; //missing
+				return -1; //missing
 
 			if (edif == dbf)
 				return 1;
 			else
-				return -1;
+				return 0;
 		}
 
 
