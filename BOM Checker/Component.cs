@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Windows.Forms;
 
 namespace BOM_Checker
 {
 	class component
 	{
 		public char type;
+		public List<bool> checks = new List<bool>();
 		public string name;
 		public string partno;
 		public string footprint;
@@ -38,6 +40,7 @@ namespace BOM_Checker
 			assign_footprint();
 			assign_package();
 			assign_temp();
+			assign_checks();
 			assign_members(); //do value and comment for some, modelno for some
 		}
 
@@ -60,6 +63,21 @@ namespace BOM_Checker
 			if (type == 'I' || type == 'S' || type == 'T')
 			{
 				assign_modelno();
+			}
+		}
+
+		private void assign_checks()
+		{
+			foreach (CheckBox check in Form1.checks)
+				checks.Add(check.Checked);
+
+			if (type == 'R' || type == 'C' || type == 'F')
+				checks[5] = false; //modelno
+
+			if (type == 'I' || type == 'S' || type == 'T')
+			{
+				checks[0] = false; //aux
+				checks[2] = false; //value
 			}
 		}
 

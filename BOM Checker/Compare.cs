@@ -101,17 +101,35 @@ namespace BOM_Checker
 
 
 				//pass both edif and partmast values into unit parse then compare
-				if (component.type == 'C' || component.type == 'F')
-					compare[0] = compare_values(unit_parse(component.value), unit_parse(datarow[1].ToString()));
-				else if (component.type == 'R')
-					compare[0] = compare_values(unit_parse(component.value), unit_parse(datarow[2].ToString()));
+				if (component.checks[0])
+				{
+					if (component.type == 'C' || component.type == 'F')
+						compare[0] = compare_values(unit_parse(component.value), unit_parse(datarow[1].ToString()));
+					else if (component.type == 'R')
+						compare[0] = compare_values(unit_parse(component.value), unit_parse(datarow[2].ToString()));
+				}
 				else
 					compare[0] = 1; //if it is not the type with an aux, then skip over it
-				compare[1] = compare_values(component.footprint, datarow[3].ToString()); //footprint mrp and footprint edif
-				compare[2] = compare_values(unit_parse(component.comment), unit_parse(datarow[4].ToString())); //value mrp and comment edif
-				compare[3] = compare_values(unit_parse(component.package), unit_parse(datarow[5].ToString())); //packtype mrp and package edif
-				compare[4] = compare_values(unit_parse(component.temp), unit_parse(datarow[6].ToString())); //rating mrp and temperature edif
-				compare[5] = compare_values(component.modelno, datarow[7].ToString()); //modelno mrp and modelno edif
+				if (component.checks[1])
+					compare[1] = compare_values(component.footprint, datarow[3].ToString()); //footprint mrp and footprint edif
+				else
+					compare[1] = 1;
+				if (component.checks[2])
+					compare[2] = compare_values(unit_parse(component.comment), unit_parse(datarow[4].ToString())); //value mrp and comment edif
+				else
+					compare[2] = 1;
+				if (component.checks[3])
+					compare[3] = compare_values(unit_parse(component.package), unit_parse(datarow[5].ToString())); //packtype mrp and package edif
+				else
+					compare[3] = 1;
+				if (component.checks[4])
+					compare[4] = compare_values(unit_parse(component.temp), unit_parse(datarow[6].ToString())); //rating mrp and temperature edif
+				else
+					compare[4] = 1;
+				if (component.checks[5])
+					compare[5] = compare_values(component.modelno, datarow[7].ToString()); //modelno mrp and modelno edif
+				else
+					compare[5] = 1;
 
 				if (compare.Contains(-1) || compare.Contains(0))
 					Console.WriteLine(component.name);
@@ -142,6 +160,10 @@ namespace BOM_Checker
 
 			for (int i = 0; i < compare.Length; i++)
 			{
+				if (compare[i] == null)
+				{
+					;
+				}
 				if (compare[i] != 1)
 				{
 					string error = errors[i] + generate_error(compare[i]);
@@ -198,18 +220,19 @@ namespace BOM_Checker
 
 		private float unit_parse(string input)
 		{
+			/*
 			if (input == null)
 				return -2; //if not supposed to be tested
-
+				*/
 			float value;
 			string striped = new String(input.Where(character => char.IsDigit(character) || char.IsPunctuation(character)).ToArray());
-
+			
 			if (input.Replace(" ", "") == "")
-				return 0; //if missing
+				return -1; //if missing
 			else if (!float.TryParse(striped.Replace("/", ""), out value) && input != "")
-				return -1; //if cant parse, because invalid format, then make sure it is wrong.
+				return 0; //if cant parse, because invalid format, then make sure it is wrong.
 				//throw new System.FormatException();
-
+				
 			if (input.Contains("m"))//milli
 				value /= 1000;
 			if (input.Contains("n"))//nano

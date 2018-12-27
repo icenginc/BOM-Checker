@@ -24,7 +24,7 @@ namespace BOM_Checker
 		List<component> edif_list, bom_component_list = new List<component>();
 		DataTable partmast_data, bom_data = new DataTable();
 		List<part_mismatch> error_list = new List<part_mismatch>(); //to store errors in
-		List<CheckBox> checks = new List<CheckBox>();
+		public static List<CheckBox> checks = new List<CheckBox>();
 		bool stop = false;
 
 		public Form1()

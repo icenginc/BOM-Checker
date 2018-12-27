@@ -54,7 +54,7 @@ namespace BOM_Checker
 					for (int j = 0; j < 25; j++)
 					{
 						line = edif_file[i + j];
-						if (line.Contains("Property") && line.Contains("String") && !line.Contains("UniqueId"))
+						if (valid_line(line))
 							raw_text += line;
 					}
 
@@ -77,6 +77,39 @@ namespace BOM_Checker
 				} //save next 25 lines if so, then save the object
 			}
 			return components;
+		}
+
+		private bool valid_line(string line)
+		{
+			bool valid = false;
+
+			if (!line.Contains("Property"))
+				return false;
+			if (!line.Contains("String"))
+				return false;
+			if (line.Contains("UniqueId"))
+				return false;
+
+			if (line.Contains("Instance"))
+				valid = true;
+			if (line.Contains("Comment"))
+				valid = true;
+			if (line.Contains("Footprint"))
+				valid = true;
+			if (line.Contains("voltage") || line.Contains("VOLTAGE") || line.Contains("Voltage"))
+				valid = true;
+			if (line.Contains("wattage") || line.Contains("WATTAGE") || line.Contains("Wattage"))
+				valid = true;
+			if (line.Contains("PACKAGE") || line.Contains("Package") || line.Contains("package"))
+				valid = true;
+			if (line.Contains("TEMPERATURE"))
+				valid = true;
+			if (line.Contains("MODELNO"))
+				valid = true;
+			if (line.Contains("PARTNO"))
+				valid = true;
+
+			return valid;
 		}
 
 		private List<component> consolidate_edif_file(List<component> filtered_list)
