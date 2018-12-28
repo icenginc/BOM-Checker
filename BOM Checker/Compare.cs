@@ -133,7 +133,17 @@ namespace BOM_Checker
 				else
 					compare[4] = 1;
 				if (component.checks[5])
-					compare[5] = compare_values(component.modelno, datarow[7].ToString()); //modelno mrp and modelno edif
+				{
+					if (component.type == 'S')
+					{
+						int one = compare_values(component.modelno, datarow[7].ToString());
+						int two = compare_values(component.modelno, datarow[3].ToString());
+						if (one == 1 || two == 1)
+							compare[5] = 1;
+					}//socket has to compare modleno edif to modelno mrp OR footprint mrp
+					else
+						compare[5] = compare_values(component.modelno, datarow[7].ToString()); //modelno mrp and modelno edif -> normal
+				}
 				else
 					compare[5] = 1;
 
