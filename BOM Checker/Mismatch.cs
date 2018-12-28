@@ -20,7 +20,6 @@ namespace BOM_Checker
 		public string name;
 		public string error;
 
-		int[] compare;
 		component edif;
 		component bom;
 		DataRow partmast;
@@ -31,18 +30,16 @@ namespace BOM_Checker
 			assign_type();
 		}
 
-		public part_mismatch(int[] array, component component, DataRow row, string error_msg)
+		public part_mismatch(component component, DataRow row, string error_msg)
 		{
-			compare = array;
 			error = error_msg;
 			edif = component;
 			partmast = row;
 			assign_members();
 		}
 
-		public part_mismatch(int[] array, component component_edif, component component_bom, string error_msg)
+		public part_mismatch(component component_edif, component component_bom, string error_msg)
 		{
-			compare = array;
 			error = error_msg;
 			edif = component_edif;
 			bom = component_bom;
@@ -52,17 +49,17 @@ namespace BOM_Checker
 		public void assign_members()
 		{
 			assign_type();
-			if(compare[0] != 1)
+			if(type == "Aux")
 				assign_aux();
-			if(compare[1] != 1)
+			if(type == "Footprint")
 				assign_footprint();
-			if (compare[2] != 1)
+			if (type == "Value")
 				assign_value();
-			if (compare[3] != 1)
+			if (type == "Package")
 				assign_package();
-			if (compare[4] != 1)
+			if (type == "Temperature")
 				assign_temp();
-			if (compare[5] != 1)
+			if (type == "ModelNo")
 				assign_modelno();
 
 			name = edif.name;
@@ -72,9 +69,9 @@ namespace BOM_Checker
 		private void assign_members_bom()
 		{
 			assign_type();
-			if (compare[0] != 1)
+			if (type == "Instance")
 				assign_instance();
-			if (compare[1] != 1)
+			if (type == "Instance Names")
 				assign_instance_names();
 
 			name = edif.name;

@@ -135,48 +135,6 @@ namespace BOM_Checker
 			}
 
 			return filtered_list;
-
 		}
-
-		/*
-		private List<component> add_component(List<component> components, component instance)
-		{
-			if (!instance.raw_text.Contains("DNI")) //dont save if its a DNI
-				components.Add(instance);
-
-			return components;
-		} //take the component list, modify isntance, add to component list, return
-
-		
-		private Object return_object(string raw_text)
-		{
-			int index = raw_text.IndexOf("PARTNO") + 16; //skips the PACKAGE (String "
-			int quote_index = raw_text.IndexOf('\"', index);
-			string partno = raw_text.Substring(index, quote_index - index);
-
-			if (partno.Length > 3) //found a partno
-				partno = partno.Substring(0, 3); //get prefix
-			else
-				return -1;
-
-			if (partno[0] == '3')
-				return new component(raw_text); //capactior
-			else if (partno[0] == '4')
-				return new component(raw_text); //resistor
-			else
-				return -1; //not found
-		}
-
-		
-
-		
-		private List<component> assign_members(List<component> consolidated_list)
-		{
-			foreach (component current in consolidated_list)
-				current.assign_members();
-
-			return consolidated_list;
-		}
-		*/ //part of implementation where external check of partnum -> moved into component object
 	}
 }

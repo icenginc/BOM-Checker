@@ -70,7 +70,7 @@ namespace BOM_Checker
 		{
 			foreach (CheckBox check in Form1.checks)
 				checks.Add(check.Checked);
-
+	
 			if (type == 'R' || type == 'C' || type == 'F')
 				checks[5] = false; //modelno
 
@@ -217,7 +217,7 @@ namespace BOM_Checker
 
 		private void assign_temp()
 		{
-			int offset = 19;
+			int offset = 21;
 			int quote_index, index = raw_text.IndexOf("TEMPERATURE") + offset; //skips the TEMPERATURE (String "
 			if (index - offset > 0) //this makes it so if the key is not found, then dont go in here
 				quote_index = raw_text.IndexOf('\"', index);

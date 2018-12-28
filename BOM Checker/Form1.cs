@@ -30,7 +30,7 @@ namespace BOM_Checker
 		public Form1()
 		{
 			InitializeComponent();
-			checks.AddRange(new CheckBox[] { checkBox_aux, checkBox_footprint, checkBox_value, checkBox_package, checkBox_temp, checkBox_instances }); 
+			checks.AddRange(new CheckBox[] { checkBox_aux, checkBox_footprint, checkBox_value, checkBox_package, checkBox_temp, checkBox_model, checkBox_instances }); 
 			textBox_status.Text += "Loaded BOM Checker Software - " + DateTime.Now.ToLongDateString() + Environment.NewLine;
 			textBox_status.Select(textBox_status.Text.Length, 0);
 		}

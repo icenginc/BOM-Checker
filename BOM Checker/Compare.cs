@@ -47,6 +47,8 @@ namespace BOM_Checker
 				partmast_compare();
 				Console.WriteLine("Comparing each entry in EDIF file to bom db values.. ");
 				bom_compare();
+				Console.WriteLine("Resolving cascading errors.. ");
+				error_compare();
 
 				Console.WriteLine("Done creating error list.");
 			}
@@ -64,13 +66,17 @@ namespace BOM_Checker
 				{
 					if (component_edif.partno == component_bom.partno)
 					{
-						compare[0] = compare_values(component_edif.instances, component_bom.instances); //compare number
-
 						component_bom.instance_names.Sort();
 						component_edif.instance_names.Sort();
 
-						compare[1] = Convert.ToInt32(component_edif.instance_names.SequenceEqual(component_bom.instance_names));
-						
+						if (component_edif.checks[6])
+						{
+							compare[0] = compare_values(component_edif.instances, component_bom.instances); //compare number
+							compare[1] = Convert.ToInt32(component_edif.instance_names.SequenceEqual(component_bom.instance_names));
+						} //filter based on checks 
+						else
+							compare = new int[] { 1, 1};
+
 						if (compare.Contains(-1) || compare.Contains(0))
 							Console.WriteLine(component_edif.name);
 
@@ -138,6 +144,23 @@ namespace BOM_Checker
 			}
 		} //compare partmast values with edif values of components
 
+		private void error_compare()
+		{
+			for (int i = 0; i < error_list.Count; i++)
+			{
+				for (int j = 0; j < error_list.Count; j++)
+				{
+					if (i < j && error_list[i].name == error_list[j].name)
+					{
+						if (error_list[i].error.Contains("mismatch") && error_list[j].error.Contains("Instance") && !error_list[i].error.Contains("Instance"))
+						{
+							Console.WriteLine("Found cascading error: " + error_list[j].name);
+							error_list[j].error += " [Warning]";
+						}
+					}//if an error of the same part, but not the same exact error
+				}//2nd iterator
+			}//1st iterator
+		}//goal of this is to mark cascaded instance errors as warnings
 
 		private void build_error_list(int[] compare, component edif, DataRow partmast) //overload for pcmrp
 		{
@@ -148,7 +171,7 @@ namespace BOM_Checker
 				if (compare[i] != 1)
 				{
 					string error = errors[i] + generate_error(compare[i]);
-					part_mismatch mismatch = new part_mismatch(compare, edif, partmast, error);
+					part_mismatch mismatch = new part_mismatch(edif, partmast, error);
 					error_list.Add(mismatch);
 				} //if its wrong
 			} //go through compare list
@@ -160,14 +183,10 @@ namespace BOM_Checker
 
 			for (int i = 0; i < compare.Length; i++)
 			{
-				if (compare[i] == null)
-				{
-					;
-				}
 				if (compare[i] != 1)
 				{
 					string error = errors[i] + generate_error(compare[i]);
-					part_mismatch mismatch = new part_mismatch(compare, edif, bom, error);
+					part_mismatch mismatch = new part_mismatch(edif, bom, error);
 					error_list.Add(mismatch);
 				} //if its wrong
 			} //go through compare list
