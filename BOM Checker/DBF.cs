@@ -21,8 +21,8 @@ namespace BOM_Checker
 			List<string> part_nums = return_part_nums(edif_list);
 			string part_list = return_part_list(part_nums).ToUpper();
 
-			//OleDbConnection connection = new OleDbConnection(@"Provider=VFPOLEDB.1;Data Source=\\backup-server\pcmrpw\PARTMAST.dbf"); //need to install this provider
-			OleDbConnection connection = new OleDbConnection(@"Provider=VFPOLEDB.1;Data Source=C:\temp\pcmrpw\PARTMAST.dbf"); //need to install this provider
+			OleDbConnection connection = new OleDbConnection(@"Provider=VFPOLEDB.1;Data Source=\\backup-server\pcmrpw\PARTMAST.dbf"); //need to install this provider
+			//OleDbConnection connection = new OleDbConnection(@"Provider=VFPOLEDB.1;Data Source=C:\temp\pcmrpw\PARTMAST.dbf"); //need to install this provider
 
 			connection.Open();
 
@@ -65,8 +65,8 @@ namespace BOM_Checker
 			//List<string> part_nums = return_part_nums(edif_list);
 			//string part_list = return_part_list(part_nums);
 
-			//OleDbConnection connection = new OleDbConnection(@"Provider=VFPOLEDB.1;Data Source=\\backup-server\pcmrpw\BOM.dbf"); //need to install this provider
-			OleDbConnection connection = new OleDbConnection(@"Provider=VFPOLEDB.1;Data Source=C:\temp\pcmrpw\BOM.dbf"); //need to install this provider
+			OleDbConnection connection = new OleDbConnection(@"Provider=VFPOLEDB.1;Data Source=\\backup-server\pcmrpw\BOM.dbf"); //need to install this provider
+			//OleDbConnection connection = new OleDbConnection(@"Provider=VFPOLEDB.1;Data Source=C:\temp\pcmrpw\BOM.dbf"); //need to install this provider
 
 			connection.Open();
 

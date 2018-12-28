@@ -18,9 +18,14 @@ namespace BOM_Checker
 {
 	public partial class Form1 : Form
 	{
+		/*
 		string edif_path = "C:\\temp\\TEST1077_Schematic.EDF"; //temrporary hardcode
 		string excel_path = "C:\\temp\\"; //temprary hardcode
 		string bomno = "814-1077"; //temporary hardcode
+		*/
+		string edif_path = "";
+		string excel_path = "";
+		string bomno = "";
 		List<component> edif_list, bom_component_list = new List<component>();
 		DataTable partmast_data, bom_data = new DataTable();
 		List<part_mismatch> error_list = new List<part_mismatch>(); //to store errors in
@@ -30,6 +35,7 @@ namespace BOM_Checker
 		public Form1()
 		{
 			InitializeComponent();
+			this.Icon = Properties.Resources.iceicon;
 			checks.AddRange(new CheckBox[] { checkBox_aux, checkBox_footprint, checkBox_value, checkBox_package, checkBox_temp, checkBox_model, checkBox_instances }); 
 			textBox_status.Text += "Loaded BOM Checker Software - " + DateTime.Now.ToLongDateString() + Environment.NewLine;
 			textBox_status.Select(textBox_status.Text.Length, 0);
@@ -102,11 +108,11 @@ namespace BOM_Checker
 		private void button_clear_Click(object sender, EventArgs e)
 		{
 			textBox_status.Text = "";
-			textbox_edif.Text = "";
-			textbox_bomno.Text = "";
-			excel_path = null;
-			edif_path = null;
-			bomno = null;
+			//textbox_edif.Text = "";
+			//textbox_bomno.Text = "";
+			//excel_path = null;
+			//edif_path = null;
+			//bomno = null;
 			if (edif_list != null)
 			{
 				edif_list.Clear();
