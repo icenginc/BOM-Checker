@@ -48,7 +48,6 @@ namespace BOM_Checker
 			edif_worker.RunWorkerAsync();
 		}//parse edif file
 
-		
 
 		private void button_db_Click(object sender, EventArgs e)
 		{

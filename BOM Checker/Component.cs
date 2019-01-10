@@ -63,6 +63,8 @@ namespace BOM_Checker
 			if (type == 'I' || type == 'S' || type == 'T')
 			{
 				assign_modelno();
+				if (type == 'T')
+					remove_comment(); //look for field and remove it
 			}
 		}
 
@@ -187,6 +189,17 @@ namespace BOM_Checker
 
 		}
 
+		private void remove_comment()
+		{
+			int offset = 17;
+			int quote_index, index = raw_text.IndexOf("Comment") + offset; //skips the PACKAGE (String "
+			if (index - offset > 0)
+				quote_index = raw_text.IndexOf('\"', index);
+			else
+				quote_index = offset - 1;
+			raw_text = raw_text.Remove(index, quote_index - index);
+		}
+
 		private void assign_value() //either watts or volts depending on if R or C
 		{
 			string key = "";
@@ -224,6 +237,14 @@ namespace BOM_Checker
 			else
 				quote_index = offset - 1;
 			temp = raw_text.Substring(index, quote_index - index);
+			/*
+			if (temp.Contains("C"))
+			{
+				string temp_stripped = temp.Substring(0, temp.Length - 1); //take out c
+				raw_text.Replace(temp, temp_stripped); //replace it in the raw text so theres no comparison error
+				temp = temp_stripped;
+			}
+			*/ //this handles an extra 'C' in the edif -> problem: what if mrp format changes? leave it to human to decide.
 		}
 
 		private void assign_partno()

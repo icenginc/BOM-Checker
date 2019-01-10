@@ -125,11 +125,11 @@ namespace BOM_Checker
 				else
 					compare[2] = 1;
 				if (component.checks[3])
-					compare[3] = compare_values(unit_parse(component.package), unit_parse(datarow[5].ToString())); //packtype mrp and package edif
+					compare[3] = compare_values(component.package, datarow[5].ToString()); //packtype mrp and package edif
 				else
 					compare[3] = 1;
 				if (component.checks[4])
-					compare[4] = compare_values(unit_parse(component.temp), unit_parse(datarow[6].ToString())); //rating mrp and temperature edif
+					compare[4] = compare_values(component.temp, datarow[6].ToString()); //rating mrp and temperature edif
 				else
 					compare[4] = 1;
 				if (component.checks[5])
@@ -234,7 +234,7 @@ namespace BOM_Checker
 		{
 			if (edif == null || dbf == null)
 				return -1; //missing
-
+			
 			edif = new String(edif.Where(ch => !char.IsWhiteSpace(ch)).ToArray()).ToLower();
 			dbf = new String(dbf.Where(ch => !char.IsWhiteSpace(ch)).ToArray()).ToLower();
 			//remove whitespace and make lowercase
@@ -278,6 +278,8 @@ namespace BOM_Checker
 				value *= 1000000;
 			if (input.Contains("/"))//fraction
 				value = fraction_parse(striped);
+			if (input.Contains("C"))//temperature
+				value = value;
 			return value;
 		}
 

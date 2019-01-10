@@ -60,9 +60,9 @@ namespace BOM_Checker
 
 					if (!raw_text.Contains("DNI")) //dont save if its DNI
 					{
-						component addition = new component(raw_text);
+						component addition = new component(raw_text); //auto populate the members
 						if(addition.type != '\0')
-							components.Add(addition); //this auto populates the members in the constructor, while adding it to the list
+							components.Add(addition); //adding it to the list
 					}
 					/*
 					var instance = return_object(raw_text);
