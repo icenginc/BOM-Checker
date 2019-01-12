@@ -30,7 +30,8 @@ namespace BOM_Checker
 			//now doing Excel read
 			if (!stop)
 			{
-				var excel_file = read_excel_file(excel_path);
+				var excel_file = read_excel_file(); //import as a datatable -> check file and see dimension of valid data
+
 			}
 		}
 	}
