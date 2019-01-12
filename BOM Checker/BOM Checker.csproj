@@ -67,10 +67,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Excel.cs">
+    <Compile Include="Compare_Excel.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Compare.cs">
+    <Compile Include="Excel_Read.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Excel_Export.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Compare_MRP.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Component.cs" />

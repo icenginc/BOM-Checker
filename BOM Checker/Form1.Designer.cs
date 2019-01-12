@@ -43,7 +43,7 @@
 			this.panel2 = new System.Windows.Forms.Panel();
 			this.button_edif_file2 = new System.Windows.Forms.Button();
 			this.button_customer_excel = new System.Windows.Forms.Button();
-			this.textBox1 = new System.Windows.Forms.TextBox();
+			this.textbox_edif2 = new System.Windows.Forms.TextBox();
 			this.textBox2 = new System.Windows.Forms.TextBox();
 			this.button_compare2 = new System.Windows.Forms.Button();
 			this.button4 = new System.Windows.Forms.Button();
@@ -204,7 +204,7 @@
 			this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.panel2.Controls.Add(this.button_edif_file2);
 			this.panel2.Controls.Add(this.button_customer_excel);
-			this.panel2.Controls.Add(this.textBox1);
+			this.panel2.Controls.Add(this.textbox_edif2);
 			this.panel2.Controls.Add(this.textBox2);
 			this.panel2.Controls.Add(this.button_compare2);
 			this.panel2.Controls.Add(this.button4);
@@ -212,7 +212,6 @@
 			this.panel2.Controls.Add(this.button5);
 			this.panel2.Controls.Add(this.label6);
 			this.panel2.Controls.Add(this.label7);
-			this.panel2.Enabled = false;
 			this.panel2.Location = new System.Drawing.Point(12, 86);
 			this.panel2.Name = "panel2";
 			this.panel2.Size = new System.Drawing.Size(534, 80);
@@ -226,6 +225,7 @@
 			this.button_edif_file2.TabIndex = 17;
 			this.button_edif_file2.Text = "...";
 			this.button_edif_file2.UseVisualStyleBackColor = true;
+			this.button_edif_file2.Click += new System.EventHandler(this.button_edif_file2_Click);
 			// 
 			// button_customer_excel
 			// 
@@ -236,12 +236,13 @@
 			this.button_customer_excel.Text = "...";
 			this.button_customer_excel.UseVisualStyleBackColor = true;
 			// 
-			// textBox1
+			// textbox_edif2
 			// 
-			this.textBox1.Location = new System.Drawing.Point(127, 28);
-			this.textBox1.Name = "textBox1";
-			this.textBox1.Size = new System.Drawing.Size(215, 20);
-			this.textBox1.TabIndex = 15;
+			this.textbox_edif2.Location = new System.Drawing.Point(127, 28);
+			this.textbox_edif2.Name = "textbox_edif2";
+			this.textbox_edif2.Size = new System.Drawing.Size(215, 20);
+			this.textbox_edif2.TabIndex = 15;
+			this.textbox_edif2.TextChanged += new System.EventHandler(this.textbox_edif2_TextChanged);
 			// 
 			// textBox2
 			// 
@@ -259,6 +260,7 @@
 			this.button_compare2.Text = "Compare Excel/EDIF";
 			this.button_compare2.UseMnemonic = false;
 			this.button_compare2.UseVisualStyleBackColor = true;
+			this.button_compare2.Click += new System.EventHandler(this.button_compare2_Click);
 			// 
 			// button4
 			// 
@@ -540,7 +542,7 @@
 		private System.Windows.Forms.Panel panel2;
 		private System.Windows.Forms.Button button_edif_file2;
 		private System.Windows.Forms.Button button_customer_excel;
-		private System.Windows.Forms.TextBox textBox1;
+		private System.Windows.Forms.TextBox textbox_edif2;
 		private System.Windows.Forms.TextBox textBox2;
 		private System.Windows.Forms.Button button_compare2;
 		private System.Windows.Forms.Button button4;

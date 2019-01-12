@@ -278,8 +278,6 @@ namespace BOM_Checker
 				value *= 1000000;
 			if (input.Contains("/"))//fraction
 				value = fraction_parse(striped);
-			if (input.Contains("C"))//temperature
-				value = value;
 			return value;
 		}
 

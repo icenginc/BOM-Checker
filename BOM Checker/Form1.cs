@@ -23,7 +23,7 @@ namespace BOM_Checker
 		string excel_path = "C:\\temp\\"; //temprary hardcode
 		string bomno = "814-1077"; //temporary hardcode
 		*/
-		string edif_path = "";
+		string edif_path = "", edif_path2 = "";
 		string excel_path = "";
 		string bomno = "";
 		List<component> edif_list, bom_component_list = new List<component>();
@@ -151,6 +151,34 @@ namespace BOM_Checker
 			edif_path = textbox_edif.Text;
 		}
 
+		private void textbox_edif2_TextChanged(object sender, EventArgs e)
+		{
+			edif_path2 = textbox_edif2.Text;
+		}
+
+		
+
+		private void button_edif_file2_Click(object sender, EventArgs e)
+		{
+			try
+			{
+				CommonOpenFileDialog dialog = new CommonOpenFileDialog(); //run in Nuget -> Install-Package Microsoft.WindowsAPICodePack-Shell -Version 1.1.0
+				dialog.InitialDirectory = "\\\\backup-server\\Assembly Drawings\\";
+				if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
+				{
+					textbox_edif2.Text = dialog.FileName;
+					//edif_path = dialog.FileName;
+				} //set path to variables
+			}
+			catch
+			{
+				MessageBox.Show("Error in file select");
+				stop = true;
+			}
+		}
+
+		
+
 		private void button_compare_Click(object sender, EventArgs e)
 		{
 			error_list.Clear();
@@ -171,6 +199,30 @@ namespace BOM_Checker
 				compare_worker.RunWorkerAsync();
 			}//normal operation
 		}
+
+		private void button_compare2_Click(object sender, EventArgs e)
+		{
+			error_list.Clear();
+			//clear the list incase it is clicked again.
+
+			if (edif_path2 == null)
+				MessageBox.Show("Please enter EDIF file path.");
+			else if (excel_path == null)
+				MessageBox.Show("Please enter Excel file path.");
+			else
+			{
+				string edif_file = edif_path2.Substring(edif_path.LastIndexOf("\\") + 1, edif_path2.Length - edif_path2.LastIndexOf("\\") - 1);
+				string excel_file = excel_path.Substring(excel_path.LastIndexOf("\\") + 1, excel_path.Length - excel_path.LastIndexOf("\\") - 1);
+				textBox_status.Text += "Comparing " + edif_file + " to " + excel_file + "..." + Environment.NewLine;
+
+				BackgroundWorker compare_worker = new BackgroundWorker();
+				compare_worker.DoWork += Compare_worker_DoWork_Excel; ;
+				compare_worker.RunWorkerCompleted += Compare_worker_RunWorkerCompleted;
+				compare_worker.RunWorkerAsync();
+			}
+		}
+
+		
 
 		private void Compare_worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
 		{
