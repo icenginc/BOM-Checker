@@ -156,7 +156,10 @@ namespace BOM_Checker
 			edif_path2 = textbox_edif2.Text;
 		}
 
-		
+		private void textBox_excel_TextChanged(object sender, EventArgs e)
+		{
+			excel_path = textBox_excel.Text;
+		}
 
 		private void button_edif_file2_Click(object sender, EventArgs e)
 		{
@@ -177,7 +180,23 @@ namespace BOM_Checker
 			}
 		}
 
-		
+		private void button_customer_excel_Click(object sender, EventArgs e)
+		{
+			try
+			{
+				CommonOpenFileDialog dialog = new CommonOpenFileDialog(); //run in Nuget -> Install-Package Microsoft.WindowsAPICodePack-Shell -Version 1.1.0
+				dialog.InitialDirectory = "\\\\backup-server\\Assembly Drawings\\";
+				if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
+				{
+					textBox_excel.Text = dialog.FileName;
+				} //set path to variables
+			}
+			catch
+			{
+				MessageBox.Show("Error in file select");
+				stop = true;
+			}
+		}
 
 		private void button_compare_Click(object sender, EventArgs e)
 		{

@@ -15,6 +15,7 @@ namespace BOM_Checker
 		public Form2(string contents)
 		{
 			InitializeComponent();
+			textBox_contents.Font = new Font(new FontFamily("Microsoft Sans Serif"), 11, FontStyle.Regular);
 			textBox_contents.Text = contents;
 			textBox_contents.Select(textBox_contents.Text.Length, 1);
 			textBox_contents.ScrollToCaret();

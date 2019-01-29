@@ -44,7 +44,7 @@
 			this.button_edif_file2 = new System.Windows.Forms.Button();
 			this.button_customer_excel = new System.Windows.Forms.Button();
 			this.textbox_edif2 = new System.Windows.Forms.TextBox();
-			this.textBox2 = new System.Windows.Forms.TextBox();
+			this.textBox_excel = new System.Windows.Forms.TextBox();
 			this.button_compare2 = new System.Windows.Forms.Button();
 			this.button4 = new System.Windows.Forms.Button();
 			this.label5 = new System.Windows.Forms.Label();
@@ -205,13 +205,14 @@
 			this.panel2.Controls.Add(this.button_edif_file2);
 			this.panel2.Controls.Add(this.button_customer_excel);
 			this.panel2.Controls.Add(this.textbox_edif2);
-			this.panel2.Controls.Add(this.textBox2);
+			this.panel2.Controls.Add(this.textBox_excel);
 			this.panel2.Controls.Add(this.button_compare2);
 			this.panel2.Controls.Add(this.button4);
 			this.panel2.Controls.Add(this.label5);
 			this.panel2.Controls.Add(this.button5);
 			this.panel2.Controls.Add(this.label6);
 			this.panel2.Controls.Add(this.label7);
+			this.panel2.Enabled = false;
 			this.panel2.Location = new System.Drawing.Point(12, 86);
 			this.panel2.Name = "panel2";
 			this.panel2.Size = new System.Drawing.Size(534, 80);
@@ -235,6 +236,7 @@
 			this.button_customer_excel.TabIndex = 16;
 			this.button_customer_excel.Text = "...";
 			this.button_customer_excel.UseVisualStyleBackColor = true;
+			this.button_customer_excel.Click += new System.EventHandler(this.button_customer_excel_Click);
 			// 
 			// textbox_edif2
 			// 
@@ -244,12 +246,13 @@
 			this.textbox_edif2.TabIndex = 15;
 			this.textbox_edif2.TextChanged += new System.EventHandler(this.textbox_edif2_TextChanged);
 			// 
-			// textBox2
+			// textBox_excel
 			// 
-			this.textBox2.Location = new System.Drawing.Point(127, 48);
-			this.textBox2.Name = "textBox2";
-			this.textBox2.Size = new System.Drawing.Size(215, 20);
-			this.textBox2.TabIndex = 14;
+			this.textBox_excel.Location = new System.Drawing.Point(127, 48);
+			this.textBox_excel.Name = "textBox_excel";
+			this.textBox_excel.Size = new System.Drawing.Size(215, 20);
+			this.textBox_excel.TabIndex = 14;
+			this.textBox_excel.TextChanged += new System.EventHandler(this.textBox_excel_TextChanged);
 			// 
 			// button_compare2
 			// 
@@ -543,7 +546,7 @@
 		private System.Windows.Forms.Button button_edif_file2;
 		private System.Windows.Forms.Button button_customer_excel;
 		private System.Windows.Forms.TextBox textbox_edif2;
-		private System.Windows.Forms.TextBox textBox2;
+		private System.Windows.Forms.TextBox textBox_excel;
 		private System.Windows.Forms.Button button_compare2;
 		private System.Windows.Forms.Button button4;
 		private System.Windows.Forms.Label label5;

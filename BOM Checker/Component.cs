@@ -123,7 +123,8 @@ namespace BOM_Checker
 
 		private void assign_instance_names(string input)
 		{
-			input = input.Remove(0, 11); //remove "Per board: "
+			if (input.Contains("Per board: ")) //remove "Per board: "
+				input = input.Replace("Per board: ", "");
 			var ref_dess = input.Split(',');
 			foreach (string ref_des in ref_dess)
 			{
