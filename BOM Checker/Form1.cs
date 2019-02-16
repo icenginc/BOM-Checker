@@ -94,13 +94,16 @@ namespace BOM_Checker
 				MessageBox.Show("No errors to export.");
 			else
 			{
-				export_to_excel();
-				Console.WriteLine("Finished building Excel file");
-
+				bool success = export_to_excel();
+			
 				//string excel_file = excel_path.Substring(excel_path.LastIndexOf("\\") + 1, excel_path.Length - excel_path.LastIndexOf("\\") - 1);
-				textBox_status.Text += "Exported to Excel file at " + excel_path + Environment.NewLine;
-				textBox_status.Select(textBox_status.Text.Length - 1, 1);
-				textBox_status.ScrollToCaret();
+				if (success)
+				{
+					Console.WriteLine("Finished building Excel file");
+					textBox_status.Text += "Exported to Excel file at " + excel_path + Environment.NewLine;
+					textBox_status.Select(textBox_status.Text.Length - 1, 1);
+					textBox_status.ScrollToCaret();
+				}
 			}
 		}
 
@@ -254,8 +257,11 @@ namespace BOM_Checker
 					+ " (" + error.string_mismatch() + ")" + Environment.NewLine;
 			}//populate textbox
 
-			textBox_status.Select(textBox_status.Text.Length - 1, 1);
-			textBox_status.ScrollToCaret();
+			if (textBox_status.Text.Length > 0)
+			{
+				textBox_status.Select(textBox_status.Text.Length - 1, 1);
+				textBox_status.ScrollToCaret();
+			}//if nothing, dont scroll
 
 			if (error_list.Count > 0)
 				button_excel.Enabled = true;

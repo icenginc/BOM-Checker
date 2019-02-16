@@ -32,9 +32,9 @@ namespace BOM_Checker
 
 		public part_mismatch(component component, DataRow row, string error_msg)
 		{
-			error = error_msg;
 			edif = component;
 			partmast = row;
+			error = error_msg;
 			assign_members();
 		}
 
@@ -46,7 +46,7 @@ namespace BOM_Checker
 			assign_members_bom();
 		}
 
-		public void assign_members()
+		public void assign_members() //for partmast errors
 		{
 			assign_type();
 			if(type == "Aux")
@@ -61,12 +61,12 @@ namespace BOM_Checker
 				assign_temp();
 			if (type == "ModelNo")
 				assign_modelno();
-
+			assign_error(); //only to differentiate AUX errors
 			name = edif.name;
 			partno = edif.partno;
 		}
 
-		private void assign_members_bom()
+		private void assign_members_bom() //for bom errors
 		{
 			assign_type();
 			if (type == "Instance")
@@ -76,6 +76,17 @@ namespace BOM_Checker
 
 			name = edif.name;
 			partno = edif.partno;
+		}
+
+		private void assign_error()
+		{
+			if (type == "Aux")
+			{
+				if (edif.type == 'R') //differentiate resitor and capacsito here
+					error = error.Replace("Aux", "Aux: Wattage");
+				if (edif.type == 'C' || edif.type == 'F')
+					error = error.Replace("Aux", "Aux: Voltage");
+			}
 		}
 
 		private void assign_type()

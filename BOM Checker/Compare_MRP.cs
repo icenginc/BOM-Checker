@@ -117,7 +117,21 @@ namespace BOM_Checker
 				else
 					compare[0] = 1; //if it is not the type with an aux, then skip over it
 				if (component.checks[1])
-					compare[1] = compare_values(component.footprint, datarow[3].ToString()); //footprint mrp and footprint edif
+					if (datarow[3].ToString().Contains(';'))
+					{
+						var split = datarow[3].ToString().Split(';');
+						int one = compare_values(component.footprint, remove_whitespace(split[0]));
+						int two = compare_values(component.footprint, remove_whitespace(split[1]));
+
+						if (one == 1 || two == 1)
+							compare[5] = 1;
+						else if (one == -1 && two == -1)
+							compare[5] = -1;
+						else
+							compare[5] = 0;
+					}
+					else
+						compare[1] = compare_values(component.footprint, datarow[3].ToString()); //footprint mrp and footprint edif
 				else
 					compare[1] = 1;
 				if (component.checks[2])

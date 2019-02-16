@@ -10,12 +10,13 @@ namespace BOM_Checker
 {
 	public partial class Form1 : Form
 	{
-		private void export_to_excel() //requires EPPlus -> run in Nuget: "Install-Package EPPlus"
+		private bool export_to_excel() //requires EPPlus -> run in Nuget: "Install-Package EPPlus"
 		{
 			try
 			{
 				CommonOpenFileDialog dialog = new CommonOpenFileDialog(); //run in Nuget -> Install-Package Microsoft.WindowsAPICodePack-Shell -Version 1.1.0
 				dialog.InitialDirectory = "\\\\backup-server\\Assembly Drawings\\";
+				dialog.DefaultFileName = bomno.Split('-')[1];
 				if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
 				{
 					excel_path = dialog.FileName + ".xlsx";
@@ -24,6 +25,7 @@ namespace BOM_Checker
 			catch
 			{
 				MessageBox.Show("Error in Excel path select");
+				return false;
 			}
 
 			if (excel_path != null)
@@ -31,14 +33,14 @@ namespace BOM_Checker
 				DataTable data1 = new DataTable();
 				data1.Columns.AddRange(new DataColumn[] {
 					new DataColumn("Name"), new DataColumn("Part Number"), new DataColumn("Error Message"),
-					new DataColumn("EDIF Value"), new DataColumn("MRP Value"),
-					new DataColumn("EDIF Aux"), new DataColumn("MRP Aux"),
-					new DataColumn("EDIF Footprint"), new DataColumn("MRP Footprint"),
-					new DataColumn("EDIF Package"), new DataColumn("MRP Package"), 
-					new DataColumn("EDIF ModelNo"), new DataColumn("MRP ModelNo"),
-					new DataColumn("EDIF Temp"), new DataColumn("MRP Temp"),
-					new DataColumn("EDIF Qty"), new DataColumn("MRP Qty"),
-					new DataColumn("EDIF Ref. Des."), new DataColumn("MRP Ref. Des.")
+					new DataColumn("Altium Value"), new DataColumn("MRP Value"),
+					new DataColumn("Altium Aux"), new DataColumn("MRP Aux"),
+					new DataColumn("Altium Footprint"), new DataColumn("MRP Footprint"),
+					new DataColumn("Altium Package"), new DataColumn("MRP Package"), 
+					new DataColumn("Altium ModelNo"), new DataColumn("MRP ModelNo"),
+					new DataColumn("Altium Temp"), new DataColumn("MRP Temp"),
+					new DataColumn("Altium Qty"), new DataColumn("MRP Qty"),
+					new DataColumn("Altium Ref. Des."), new DataColumn("MRP Ref. Des.")
 				}); //add columns of the data from mismatch datatype
 
 				foreach (part_mismatch x in error_list)
@@ -108,17 +110,20 @@ namespace BOM_Checker
 					try
 					{
 						package.SaveAs(new System.IO.FileInfo(@excel_path)); //save to file
+						return true;
 					}
 					catch (Exception e)
 					{
 						if(e is System.IO.IOException || e is System.InvalidOperationException)
 							MessageBox.Show("Please close the Excel File before trying to overwrite.");
+						return false;
 					}
 				}
 			} //normal operation for saving excel file
 			else
 			{
 				MessageBox.Show("Invalid Excel path select");
+				return false;
 			}
 		}
 	}
