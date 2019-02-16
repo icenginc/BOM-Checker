@@ -81,7 +81,7 @@ namespace BOM_Checker
 				connection.Close();
 			}
 
-			//CreateCSVFile(ref results, "C:\\temp\\pcmrpw\\Excel Export\\bom.csv"); //for visual tool
+			//CreateCSVFile(ref results, "C:\\temp\\pcmrpw\\Excel Export\\" + bomno + ".csv"); //for visual tool
 
 			return results;
 		}

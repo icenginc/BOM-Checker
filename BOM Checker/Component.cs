@@ -122,9 +122,18 @@ namespace BOM_Checker
 		}//use partnum to do type
 
 		private void assign_instance_names(string input)
-		{
+		{/*
 			if (input.Contains("Per board: ")) //remove "Per board: "
 				input = input.Replace("Per board: ", "");
+			if (input.Contains("Per Board: ")) //remove "Per Board: "
+				input = input.Replace("Per Board: ", "");
+			if (input.Contains("Per Cell: ")) //remove "Per Cell: "
+				input = input.Replace("Per Cell: ", "");
+			if (input.Contains("Per 
+			*/
+			input = Regex.Replace(input, "per board: ", "", RegexOptions.IgnoreCase);
+			input = Regex.Replace(input, "per cell: ", "", RegexOptions.IgnoreCase);
+
 			var ref_dess = input.Split(',');
 			foreach (string ref_des in ref_dess)
 			{
@@ -163,8 +172,12 @@ namespace BOM_Checker
 			int offset = 9;
 			int index = raw_text.IndexOf("Instance") + offset; //skips the (Instance "
 
-			name = Form1.remove_whitespace(raw_text.Substring(index, raw_text.IndexOf("(Property") - index));
-			instance_names.Add(name); //add itself to the instance names
+			string substring = Form1.remove_whitespace(raw_text.Substring(index, raw_text.IndexOf("(Property") - index));
+			if (substring.Contains("_CELL"))
+				name = substring.Split('_')[0];
+			else
+				name = substring;
+			instance_names.Add(name); //add itself to the instance names, this is only for the 1st element
 		}
 
 		private void assign_package()

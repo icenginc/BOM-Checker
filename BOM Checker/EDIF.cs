@@ -61,7 +61,7 @@ namespace BOM_Checker
 					if (!raw_text.Contains("DNI")) //dont save if its DNI
 					{
 						component addition = new component(raw_text); //auto populate the members
-						if(addition.type != '\0')
+						if(addition.type != '\0') //if valid component
 							components.Add(addition); //adding it to the list
 					}
 					/*
@@ -88,6 +88,8 @@ namespace BOM_Checker
 			if (!line.Contains("String"))
 				return false;
 			if (line.Contains("UniqueId"))
+				return false;
+			if (line.Contains("PhysicalPath")) //causes problems bc of cells
 				return false;
 
 			if (line.Contains("Instance"))
@@ -128,7 +130,8 @@ namespace BOM_Checker
 							filtered_list.RemoveAt(j);
 							j--;
 							filtered_list[i].instances++;
-							filtered_list[i].instance_names.Add(instance);
+							if(!filtered_list[i].instance_names.Contains(instance)) //prevent duplicates
+								filtered_list[i].instance_names.Add(instance);
 						}//removal routine
 					}//compare in here, if identical then delete and increment instances member
 				}
