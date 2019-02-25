@@ -107,16 +107,26 @@ namespace BOM_Checker
 
 
 				//pass both edif and partmast values into unit parse then compare
-				if (component.checks[0])
+				if (component.checks[0] || component.checks[1])
 				{
 					if (component.type == 'C' || component.type == 'F')
-						compare[0] = compare_values(unit_parse(component.value), unit_parse(datarow[1].ToString()));
-					else if (component.type == 'R')
-						compare[0] = compare_values(unit_parse(component.value), unit_parse(datarow[2].ToString()));
+					{
+						if (component.checks[0]) //auxv
+							compare[0] = compare_values(unit_parse(component.value), unit_parse(datarow[1].ToString()));
+						else
+							compare[0] = 1;
+					}
+					if (component.type == 'R')
+					{
+						if (component.checks[1]) //auxw
+							compare[0] = compare_values(unit_parse(component.value), unit_parse(datarow[2].ToString()));
+						else
+							compare[0] = 1;
+					}
 				}
 				else
 					compare[0] = 1; //if it is not the type with an aux, then skip over it
-				if (component.checks[1])
+				if (component.checks[2]) //footprint
 					if (datarow[3].ToString().Contains(';'))
 					{
 						var split = datarow[3].ToString().Split(';');
@@ -134,19 +144,19 @@ namespace BOM_Checker
 						compare[1] = compare_values(component.footprint, datarow[3].ToString()); //footprint mrp and footprint edif
 				else
 					compare[1] = 1;
-				if (component.checks[2])
+				if (component.checks[3]) //value
 					compare[2] = compare_values(unit_parse(component.comment), unit_parse(datarow[4].ToString())); //value mrp and comment edif
 				else
 					compare[2] = 1;
-				if (component.checks[3])
+				if (component.checks[4]) //package
 					compare[3] = compare_values(component.package, datarow[5].ToString()); //packtype mrp and package edif
 				else
 					compare[3] = 1;
-				if (component.checks[4])
+				if (component.checks[5]) //temperature
 					compare[4] = compare_values(component.temp, datarow[6].ToString()); //rating mrp and temperature edif
 				else
 					compare[4] = 1;
-				if (component.checks[5])
+				if (component.checks[6]) //modelno
 				{
 					if (component.type == 'S')
 					{

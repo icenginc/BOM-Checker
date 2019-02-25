@@ -74,11 +74,12 @@ namespace BOM_Checker
 				checks.Add(check.Checked);
 	
 			if (type == 'R' || type == 'C' || type == 'F')
-				checks[5] = false; //modelno
+				checks[6] = false; //modelno
 
 			if (type == 'I' || type == 'S' || type == 'T')
 			{
-				checks[0] = false; //aux
+				checks[0] = false; //auxv
+				checks[1] = false; //auxw
 				checks[2] = false; //value
 			}
 		}

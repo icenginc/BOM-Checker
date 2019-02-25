@@ -65,7 +65,8 @@
 			this.checkBox_package = new System.Windows.Forms.CheckBox();
 			this.checkBox_value = new System.Windows.Forms.CheckBox();
 			this.checkBox_footprint = new System.Windows.Forms.CheckBox();
-			this.checkBox_aux = new System.Windows.Forms.CheckBox();
+			this.checkBox_auxw = new System.Windows.Forms.CheckBox();
+			this.checkBox_auxv = new System.Windows.Forms.CheckBox();
 			this.panel1.SuspendLayout();
 			this.panel2.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -393,17 +394,18 @@
 			// 
 			// groupBox1
 			// 
+			this.groupBox1.Controls.Add(this.checkBox_auxv);
 			this.groupBox1.Controls.Add(this.checkBox_instances);
 			this.groupBox1.Controls.Add(this.checkBox_model);
 			this.groupBox1.Controls.Add(this.checkBox_temp);
 			this.groupBox1.Controls.Add(this.checkBox_package);
 			this.groupBox1.Controls.Add(this.checkBox_value);
 			this.groupBox1.Controls.Add(this.checkBox_footprint);
-			this.groupBox1.Controls.Add(this.checkBox_aux);
+			this.groupBox1.Controls.Add(this.checkBox_auxw);
 			this.groupBox1.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-			this.groupBox1.Location = new System.Drawing.Point(246, 9);
+			this.groupBox1.Location = new System.Drawing.Point(219, 9);
 			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(300, 57);
+			this.groupBox1.Size = new System.Drawing.Size(327, 57);
 			this.groupBox1.TabIndex = 26;
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "Comparison Parameters";
@@ -414,7 +416,7 @@
 			this.checkBox_instances.CheckAlign = System.Drawing.ContentAlignment.TopCenter;
 			this.checkBox_instances.Checked = true;
 			this.checkBox_instances.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.checkBox_instances.Location = new System.Drawing.Point(243, 20);
+			this.checkBox_instances.Location = new System.Drawing.Point(274, 20);
 			this.checkBox_instances.Name = "checkBox_instances";
 			this.checkBox_instances.Size = new System.Drawing.Size(52, 31);
 			this.checkBox_instances.TabIndex = 6;
@@ -427,7 +429,7 @@
 			this.checkBox_model.CheckAlign = System.Drawing.ContentAlignment.TopCenter;
 			this.checkBox_model.Checked = true;
 			this.checkBox_model.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.checkBox_model.Location = new System.Drawing.Point(208, 20);
+			this.checkBox_model.Location = new System.Drawing.Point(240, 20);
 			this.checkBox_model.Name = "checkBox_model";
 			this.checkBox_model.Size = new System.Drawing.Size(40, 31);
 			this.checkBox_model.TabIndex = 5;
@@ -440,7 +442,7 @@
 			this.checkBox_temp.CheckAlign = System.Drawing.ContentAlignment.TopCenter;
 			this.checkBox_temp.Checked = true;
 			this.checkBox_temp.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.checkBox_temp.Location = new System.Drawing.Point(166, 20);
+			this.checkBox_temp.Location = new System.Drawing.Point(204, 20);
 			this.checkBox_temp.Name = "checkBox_temp";
 			this.checkBox_temp.Size = new System.Drawing.Size(41, 31);
 			this.checkBox_temp.TabIndex = 4;
@@ -453,7 +455,7 @@
 			this.checkBox_package.CheckAlign = System.Drawing.ContentAlignment.TopCenter;
 			this.checkBox_package.Checked = true;
 			this.checkBox_package.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.checkBox_package.Location = new System.Drawing.Point(117, 20);
+			this.checkBox_package.Location = new System.Drawing.Point(157, 20);
 			this.checkBox_package.Name = "checkBox_package";
 			this.checkBox_package.Size = new System.Drawing.Size(54, 31);
 			this.checkBox_package.TabIndex = 3;
@@ -466,7 +468,7 @@
 			this.checkBox_value.CheckAlign = System.Drawing.ContentAlignment.TopCenter;
 			this.checkBox_value.Checked = true;
 			this.checkBox_value.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.checkBox_value.Location = new System.Drawing.Point(83, 20);
+			this.checkBox_value.Location = new System.Drawing.Point(125, 20);
 			this.checkBox_value.Name = "checkBox_value";
 			this.checkBox_value.Size = new System.Drawing.Size(38, 31);
 			this.checkBox_value.TabIndex = 2;
@@ -479,25 +481,38 @@
 			this.checkBox_footprint.CheckAlign = System.Drawing.ContentAlignment.TopCenter;
 			this.checkBox_footprint.Checked = true;
 			this.checkBox_footprint.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.checkBox_footprint.Location = new System.Drawing.Point(35, 20);
+			this.checkBox_footprint.Location = new System.Drawing.Point(80, 20);
 			this.checkBox_footprint.Name = "checkBox_footprint";
 			this.checkBox_footprint.Size = new System.Drawing.Size(52, 31);
 			this.checkBox_footprint.TabIndex = 1;
 			this.checkBox_footprint.Text = "Footprint";
 			this.checkBox_footprint.UseVisualStyleBackColor = true;
 			// 
-			// checkBox_aux
+			// checkBox_auxw
 			// 
-			this.checkBox_aux.AutoSize = true;
-			this.checkBox_aux.CheckAlign = System.Drawing.ContentAlignment.TopCenter;
-			this.checkBox_aux.Checked = true;
-			this.checkBox_aux.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.checkBox_aux.Location = new System.Drawing.Point(7, 20);
-			this.checkBox_aux.Name = "checkBox_aux";
-			this.checkBox_aux.Size = new System.Drawing.Size(29, 31);
-			this.checkBox_aux.TabIndex = 0;
-			this.checkBox_aux.Text = "Aux";
-			this.checkBox_aux.UseVisualStyleBackColor = true;
+			this.checkBox_auxw.AutoSize = true;
+			this.checkBox_auxw.CheckAlign = System.Drawing.ContentAlignment.TopCenter;
+			this.checkBox_auxw.Checked = true;
+			this.checkBox_auxw.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.checkBox_auxw.Location = new System.Drawing.Point(40, 20);
+			this.checkBox_auxw.Name = "checkBox_auxw";
+			this.checkBox_auxw.Size = new System.Drawing.Size(46, 31);
+			this.checkBox_auxw.TabIndex = 0;
+			this.checkBox_auxw.Text = "Aux(W)";
+			this.checkBox_auxw.UseVisualStyleBackColor = true;
+			// 
+			// checkBox_auxv
+			// 
+			this.checkBox_auxv.AutoSize = true;
+			this.checkBox_auxv.CheckAlign = System.Drawing.ContentAlignment.TopCenter;
+			this.checkBox_auxv.Checked = true;
+			this.checkBox_auxv.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.checkBox_auxv.Location = new System.Drawing.Point(2, 20);
+			this.checkBox_auxv.Name = "checkBox_auxv";
+			this.checkBox_auxv.Size = new System.Drawing.Size(42, 31);
+			this.checkBox_auxv.TabIndex = 7;
+			this.checkBox_auxv.Text = "Aux(V)";
+			this.checkBox_auxv.UseVisualStyleBackColor = true;
 			// 
 			// Form1
 			// 
@@ -561,13 +576,14 @@
 		private System.Windows.Forms.Button button_clear;
 		private System.Windows.Forms.Button button_output;
 		private System.Windows.Forms.GroupBox groupBox1;
-		private System.Windows.Forms.CheckBox checkBox_aux;
+		private System.Windows.Forms.CheckBox checkBox_auxw;
 		private System.Windows.Forms.CheckBox checkBox_footprint;
 		private System.Windows.Forms.CheckBox checkBox_instances;
 		private System.Windows.Forms.CheckBox checkBox_model;
 		private System.Windows.Forms.CheckBox checkBox_temp;
 		private System.Windows.Forms.CheckBox checkBox_package;
 		private System.Windows.Forms.CheckBox checkBox_value;
+		private System.Windows.Forms.CheckBox checkBox_auxv;
 	}
 }
 
