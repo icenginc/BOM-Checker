@@ -100,6 +100,9 @@ namespace BOM_Checker
 					bom_list.Add(new_component);
 			}//loop through all entries in db
 
+			if (bom_list.Count == 0)
+				MessageBox.Show("Nothing found for this BOM #, are you sure it is correct?");
+
 			return bom_list;
 		}
 

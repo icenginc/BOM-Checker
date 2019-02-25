@@ -91,6 +91,8 @@ namespace BOM_Checker
 				return false;
 			if (line.Contains("PhysicalPath")) //causes problems bc of cells
 				return false;
+			if (line.Contains("SourceDesignator")) //only used when cell derivative
+				return false;
 
 			if (line.Contains("Instance"))
 				valid = true;

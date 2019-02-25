@@ -207,7 +207,7 @@ namespace BOM_Checker
 		private void remove_comment()
 		{
 			int offset = 17;
-			int quote_index, index = raw_text.IndexOf("Comment") + offset; //skips the PACKAGE (String "
+			int quote_index, index = raw_text.IndexOf("Comment") + offset; //takes out the comment so they coalesce
 			if (index - offset > 0)
 				quote_index = raw_text.IndexOf('\"', index);
 			else

@@ -275,10 +275,9 @@ namespace BOM_Checker
 
 		private float unit_parse(string input)
 		{
-			/*
+			
 			if (input == null)
-				return -2; //if not supposed to be tested
-				*/
+				return -2; //is not supposed to be tested
 			float value;
 			string striped = new String(input.Where(character => char.IsDigit(character) || char.IsPunctuation(character)).ToArray());
 			
