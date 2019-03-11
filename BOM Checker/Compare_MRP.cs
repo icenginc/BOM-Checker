@@ -69,7 +69,7 @@ namespace BOM_Checker
 						component_bom.instance_names.Sort();
 						component_edif.instance_names.Sort();
 
-						if (component_edif.checks[6])
+						if (component_edif.checks[7]) //instances checkbox
 						{
 							compare[0] = compare_values(component_edif.instances, component_bom.instances); //compare number
 							compare[1] = Convert.ToInt32(component_edif.instance_names.SequenceEqual(component_bom.instance_names));
@@ -78,8 +78,11 @@ namespace BOM_Checker
 							compare = new int[] { 1, 1};
 
 						if (compare.Contains(-1) || compare.Contains(0))
+						{
 							Console.WriteLine(component_edif.name);
-
+							Console.WriteLine(component_edif.raw_text + Environment.NewLine);
+							Console.WriteLine(component_bom.raw_text + Environment.NewLine);
+						}
 						build_error_list(compare, component_edif, component_bom);
 
 					}//do comparison in here

@@ -146,7 +146,11 @@ namespace BOM_Checker
 					Int32.TryParse(begin, out int one);
 					Int32.TryParse(end, out int two);
 					int span = (two - one) + 1; //this is how many in between, plus the one itself
-
+					if (span < 0)
+					{
+						//instance_names.Add("INVALID input");
+						continue;
+					}
 					for (int i = 0; i < span; i++)
 					{
 						string name = new string(range[0].Where(c => Char.IsLetter(c)).ToArray());
