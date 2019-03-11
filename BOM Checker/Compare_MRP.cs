@@ -16,43 +16,69 @@ namespace BOM_Checker
 
 			Console.WriteLine("Reading EDIF file...");
 			var file_contents = read_edif_file(edif_path);  //read in the file into memory
-			if (!stop)
+			try
 			{
-				Console.WriteLine("Parsing EDIF file...");
-				var filtered_file = filter_edif_file(file_contents);  //pick out the instances and add values 
-				Console.WriteLine("Consolidating part instances...");
-				//var consolidated_list
-				edif_list = consolidate_edif_file(filtered_file); //merge identical instances into one
-				//Console.WriteLine("Parsing text into values...");
-				//edif_list = assign_members(consolidated_list); //fill out class objects from raw text
-				Console.WriteLine("Discovered " + edif_list.Count + " unique parts from EDIF file." + Environment.NewLine);
+				if (!stop)
+				{
+					Console.WriteLine("Parsing EDIF file...");
+					var filtered_file = filter_edif_file(file_contents);  //pick out the instances and add values 
+					Console.WriteLine("Consolidating part instances...");
+					//var consolidated_list
+					edif_list = consolidate_edif_file(filtered_file); //merge identical instances into one
+																	  //Console.WriteLine("Parsing text into values...");
+																	  //edif_list = assign_members(consolidated_list); //fill out class objects from raw text
+					Console.WriteLine("Discovered " + edif_list.Count + " unique parts from EDIF file." + Environment.NewLine);
+				}
 			}
-			//now doing DB reads
-			if (!stop)
+			catch
 			{
-				Console.WriteLine("Accessing PCMRP partmast database...");
-				partmast_data = get_partmast_data(edif_list);
-				Console.WriteLine("Accessing PCMRP bom database...");
-				bom_data = get_bom_data(bomno);
-				bom_component_list = build_bom_list(bom_data);
-				Console.WriteLine("Checking against EDIF entries...");
-				var not_found_partmast = check_datatable(return_part_nums(edif_list), partmast_data); //check that we have matching number of entries, returns list of non-matching parts
-				var not_found_bom = check_datatable(return_part_nums(edif_list), bom_data); //check this too
-				handle_not_found(not_found_partmast, not_found_bom); //if there is a non-matching partno, then tell user here
+				Console.WriteLine("Error in EDIF file read.. exiting");
+				MessageBox.Show("Error in EDIF file read.. exiting");
+				stop = true;
+			}
+			try
+			{
+				//now doing DB reads
+				if (!stop)
+				{
+					Console.WriteLine("Accessing PCMRP partmast database...");
+					partmast_data = get_partmast_data(edif_list);
+					Console.WriteLine("Accessing PCMRP bom database...");
+					bom_data = get_bom_data(bomno);
+					bom_component_list = build_bom_list(bom_data);
+					Console.WriteLine("Checking against EDIF entries...");
+					var not_found_partmast = check_datatable(return_part_nums(edif_list), partmast_data); //check that we have matching number of entries, returns list of non-matching parts
+					var not_found_bom = check_datatable(return_part_nums(edif_list), bom_data); //check this too
+					handle_not_found(not_found_partmast, not_found_bom); //if there is a non-matching partno, then tell user here
+				}
+			}
+			catch
+			{
+				Console.WriteLine("Error in database read.. exiting");
+				MessageBox.Show("Error in database read.. exiting");
+				stop = true;
 			}
 			//now doing comparisons
-			if (!stop)
+			try
 			{
-				Console.WriteLine("Comparing each entry in EDIF file to partmast db values.. ");
-				partmast_compare();
-				Console.WriteLine("Comparing each entry in EDIF file to bom db values.. ");
-				bom_compare();
-				Console.WriteLine("Resolving cascading errors.. ");
-				error_compare();
+				if (!stop)
+				{
+					Console.WriteLine("Comparing each entry in EDIF file to partmast db values.. ");
+					partmast_compare();
+					Console.WriteLine("Comparing each entry in EDIF file to bom db values.. ");
+					bom_compare();
+					Console.WriteLine("Resolving cascading errors.. ");
+					error_compare();
 
-				Console.WriteLine("Done creating error list.");
+					Console.WriteLine("Done creating error list.");
+				}
 			}
-
+			catch
+			{
+				Console.WriteLine("Error in data comparison.. exiting");
+				MessageBox.Show("Error in data comparison.. exiting");
+				stop = true;
+			}
 			stop = false;
 		}
 
