@@ -32,8 +32,8 @@ namespace BOM_Checker
 			}
 			catch
 			{
-				Console.WriteLine("Error in EDIF file read.. exiting");
-				MessageBox.Show("Error in EDIF file read.. exiting");
+				Console.WriteLine("Error in EDIF file read.. stopping");
+				MessageBox.Show("Error in EDIF file read.. stopping");
 				stop = true;
 			}
 			try
@@ -54,8 +54,8 @@ namespace BOM_Checker
 			}
 			catch
 			{
-				Console.WriteLine("Error in database read.. exiting");
-				MessageBox.Show("Error in database read.. exiting");
+				Console.WriteLine("Error in database read.. stopping");
+				MessageBox.Show("Error in database read.. stopping");
 				stop = true;
 			}
 			//now doing comparisons
@@ -75,8 +75,8 @@ namespace BOM_Checker
 			}
 			catch
 			{
-				Console.WriteLine("Error in data comparison.. exiting");
-				MessageBox.Show("Error in data comparison.. exiting");
+				Console.WriteLine("Error in data comparison.. stopping");
+				MessageBox.Show("Error in data comparison.. stopping");
 				stop = true;
 			}
 			stop = false;

@@ -135,7 +135,7 @@ namespace BOM_Checker
 			input = Regex.Replace(input, "per board: ", "", RegexOptions.IgnoreCase);
 			input = Regex.Replace(input, "per cell: ", "", RegexOptions.IgnoreCase);
 
-			var ref_dess = input.Split(',');
+			var ref_dess = input.Split(new char[]{ ',', '|' });
 			foreach (string ref_des in ref_dess)
 			{
 				if (ref_des.Contains('-'))

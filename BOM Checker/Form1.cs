@@ -35,6 +35,7 @@ namespace BOM_Checker
 		public Form1()
 		{
 			InitializeComponent();
+			this.Text = "BOM Checker v1.12"; //change this as we update the program 
 			this.Icon = Properties.Resources.iceicon;
 			checks.AddRange(new CheckBox[] { checkBox_auxv, checkBox_auxw, checkBox_footprint, checkBox_value, checkBox_package, checkBox_temp, checkBox_model, checkBox_instances }); 
 			textBox_status.Text += "Loaded BOM Checker Software - " + DateTime.Now.ToLongDateString() + Environment.NewLine;
